@@ -1,2 +1,3 @@
 class Cluster:
-    pass
+    def __init__(self, tuple):
+        pass
