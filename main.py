@@ -13,7 +13,13 @@ async def main():
         # process(t)
 
 def best_selection(t): 
-    pass
+    E = set()
+    for C_j in gamma:
+        e = Enlargement(C_j, t)
+        E.add(e)
+    _min_ = min(E)
+    
+
 
 def delay_constraint(t):
     pass
