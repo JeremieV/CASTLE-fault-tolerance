@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from ConcretAttribute import _CategoricalAttributes,_ContinousAttributes
 #I miss Java and c#
 
 #public abstract class
@@ -47,11 +48,17 @@ class Attribute(ABC):
 #public class responsible for creating the attribute objects
 class AttributeFactory:
 
-    #TODO
     #Call this to create a tuple of attribute objects 
     #from the first row of file
+    #if a DHG is given, then we know this is a categorical attribute
     def createAttribute(name,index,QI,DHG=None):
-        return None
+        result = None
+        if (DHG==None):
+            result = _ContinousAttributes(name,index)
+        else:
+            result = _CategoricalAttributes(name,index,DHG)
+        result.QI = QI
+        return result
 
 
 

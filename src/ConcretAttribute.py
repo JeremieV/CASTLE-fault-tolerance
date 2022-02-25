@@ -42,9 +42,10 @@ class _CategoricalAttributes(Attribute):
     DHG = None
     LeftTraversal = None
 
-    def __init__(self,name,index):
+    def __init__(self,name,index,DHG):
         self.name = name
         self.index = index
+        self.DHG = DHG
         self.LeftTraversal = self.DHG.getLeftTraversal() #TODO
 
 

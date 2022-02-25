@@ -34,7 +34,8 @@ class DataSet:
             index = i
             i += 1
             QI = self._isQI(column)
-            resultList.append(AttributeFactory.createAttribute(name,index,QI))
+            DGH = self._getDGH(column)
+            resultList.append(AttributeFactory.createAttribute(name,index,QI,DGH))
         return tuple(resultList)
 
     #private method
@@ -42,3 +43,10 @@ class DataSet:
     #returns true if the column is a quasi-identifier
     def _isQI(self,columnName):
         return True
+
+    #TODO
+    #private method
+    #returns the DGH of a column if it exists
+    #otherwise, return None
+    def _getDGH(self,columnName):
+        return None
