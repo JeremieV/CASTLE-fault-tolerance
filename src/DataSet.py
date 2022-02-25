@@ -1,7 +1,5 @@
-
-#public class
-#contains information regarding the csv of a given file
 from contextlib import nullcontext
+import csv
 
 #public class
 #represents the data set contained in a CSV file
@@ -12,14 +10,17 @@ from contextlib import nullcontext
 #   row = data.getNextTuple()
 class DataSet:
     csvreader = None
+    myHeader = None
 
-    def __init__(self,fileName):
-        pass
+    def __init__(self,file):
+        csv_reader = csv.reader(file)
+        row = next(csv_reader)
+        self.myHeader = self.getHeader(row)
 
     #returns a tuple of attributes
-    def getHeader(self):
-        next(self.csvreader)
-        pass
+    def getHeader(self,row):
+        #create the tuple of attributes
+        return tuple()
 
     def getNextRow(self):
-        pass
+        return next(self.csvreader)
