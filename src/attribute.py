@@ -18,6 +18,7 @@ class Attribute(ABC):
         else:
             return tuple[self.index]
 
+    #returns the name of the column, used for printing
     def getName(self):
         return self.name
 
@@ -25,15 +26,18 @@ class Attribute(ABC):
     @abstractmethod
     def getGeneralization(self,range):
         return NotImplementedError
+    
+    #given a list of values,
+    #return a tuple representing the range
+    @abstractmethod
+    def createRange(self,values):
+        return NotImplementedError
 
-#private class
-#continous attributes
-class _ContinousAttributes(Attribute):
-    min
-    max
-    def __init__(self,name,index):
-        self.name = name
-        self.index = index
+    #given the current range (as a tuple of length 2) and new value
+    #return the expanded range (as a tuple of length 2)
+    @abstractmethod
+    def expandRange(self,range,value):
+        return NotImplementedError
 
 
 

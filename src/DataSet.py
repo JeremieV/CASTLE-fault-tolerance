@@ -1,7 +1,7 @@
 from ast import Import
 from contextlib import nullcontext
 import csv
-from attribute import Attribute,AttributeFactory
+from Attribute import Attribute,AttributeFactory
 
 #public class
 #represents the data set contained in a CSV file
@@ -12,16 +12,21 @@ from attribute import Attribute,AttributeFactory
 #   row = data.getNextTuple()
 class DataSet:
     csvreader = None
-    myHeader = None
+    Headers = None
 
     def __init__(self,file):
-        csv_reader = csv.reader(file)
-        row = next(csv_reader)
-        self.myHeader = self.getHeader(row)
+        self.csv_reader = csv.reader(file)
+        row = next(self.csv_reader)
+        self.myHeader = self.__createHeaders(row)
 
     #public method
+    #returns the next tuple
+    def getNextRow(self):
+        return next(self.csvreader)
+
+    #private method
     #returns a tuple of attributes
-    def getHeader(self,row):
+    def _createHeaders(self,row):
         resultList = []
         i = 0
         for column in row:
@@ -36,8 +41,3 @@ class DataSet:
     #returns true if the column is a quasi-identifier
     def _isQI(self,columnName):
         return True
-
-    #public method
-    #returns the next tuple
-    def getNextRow(self):
-        return next(self.csvreader)
