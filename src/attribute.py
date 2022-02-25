@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import tuple_obj
 
 class Attribute(ABC):
-
+    
     #returns true if this attribute is a quasi-identifier
     @abstractmethod
     def isQI():
@@ -18,6 +18,6 @@ class Attribute(ABC):
     def getGeneralization(range):
         return NotImplementedError
 
-    
+
 
     

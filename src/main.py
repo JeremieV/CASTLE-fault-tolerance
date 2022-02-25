@@ -2,11 +2,24 @@ import csv
 import asyncio
 
 from cluster import Cluster
+from attribute import Attribute
+
+# the attribute headers is a global value that is defined when the stream starts
+# for now the quasi-identifiers are defined to be all the attributes of the tuple
+attribute_headers = None
+quasi_identifiers = None
 
 async def stream():
+    """Opens a csv file and starts outputting its elements as a stream."""
     with open('datasets/credit_data.csv') as f:
         csv_reader = csv.reader(f)
+        first_line = True
         for row in csv_reader:
+            if first_line:
+                attribute_headers = tuple(row)
+                quasi_identifiers = attribute_headers
+                first_line = False
+                continue
             yield tuple(row)
             await asyncio.sleep(1)
     
@@ -19,9 +32,9 @@ def info_loss(g:tuple):
     return sum([v_info_loss() for v in g]) * len(g)
 
 
-def Enlargement(C, t:tuple):
+# def Enlargement(C, t:tuple):
 
-    return sum([v_info_loss() - v_info_loss() for ]) / n
+#     return sum([v_info_loss() - v_info_loss() for ]) / n
 
 # def best_selection(t): 
 #     E = set()
