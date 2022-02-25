@@ -1,27 +1,24 @@
-import cluster
-
-def main():
-    print("main is running")
-    cluster1 = cluster.Cluster()
+from cluster import Cluster
+from tuple_obj import TupleObj
     
-    # demo data
-    demoTuple = ("Tim", 21, "Computer Science", "M")
-    cluster1.add_to_cluster(demoTuple)
+def test_cluster():
+    cluster1 = Cluster(("Name", "Age", "Course", "Sex"))
+    tuple1 = TupleObj(("Tim", 21, "Computer Science", "M"), ("Name", "Age", "Course", "Sex"),  ("Age", "Sex"))
+    cluster1.add_to_cluster(tuple1)
     print("ranges: " + str(cluster1.ranges))
-    demoTuple = ("Callum", 20, "Computer Science", "M")
-    cluster1.add_to_cluster(demoTuple)
+    tuple2 = TupleObj(("Callum", 20, "Computer Science", "M"), ("Name", "Age", "Course", "Sex"),  ("Age", "Sex"))
+    cluster1.add_to_cluster(tuple2)
     print("ranges: " + str(cluster1.ranges))
-    demoTuple = ("Xindi", 21, "Data Science", "F")
-    cluster1.add_to_cluster(demoTuple)
+    tuple3 = TupleObj(("Xindi", 21, "Data Science", "F"), ("Name", "Age", "Course", "Sex"),  ("Age", "Sex"))
+    cluster1.add_to_cluster(tuple3)
     print("ranges: " + str(cluster1.ranges))
-    demoTuple = ("Jeremie", 22, "Discrete Maths", "M")
-    cluster1.add_to_cluster(demoTuple)
+    tuple4 = TupleObj(("Jeremie", 22, "Discrete Maths", "M"), ("Name", "Age", "Course", "Sex"),  ("Age", "Sex"))
+    cluster1.add_to_cluster(tuple4)
     print("ranges: " + str(cluster1.ranges))
 
-    print(cluster1.tuples)
-    cluster_size = cluster1.__len__()
-    print("cluster size: " + str(cluster_size))
-    
+    gen_tuple = cluster1.get_generic(tuple1)
+    gen_tuple.output_tuple()
+
 
 if __name__ == "__main__":
-    main()
+    test_cluster()
