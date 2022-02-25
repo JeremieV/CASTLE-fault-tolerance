@@ -22,7 +22,10 @@ class Attribute(ABC):
     def getName(self):
         return self.name
 
-    #returns the generalized value of this attribute according to given range
+    #returns the generalized value  (as a string)
+    #of this attribute according to the given range
+    #
+    #This was meant to be used when outputting
     @abstractmethod
     def getGeneralization(self,range):
         return NotImplementedError
@@ -44,7 +47,7 @@ class Attribute(ABC):
 #public class responsible for creating the attribute objects
 class AttributeFactory:
 
-    #TO DO
+    #TODO
     #Call this to create a tuple of attribute objects 
     #from the first row of file
     def createAttribute(name,index,QI,DHG=None):

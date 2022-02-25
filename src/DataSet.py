@@ -38,6 +38,7 @@ class DataSet:
         return tuple(resultList)
 
     #private method
+    #TODO
     #returns true if the column is a quasi-identifier
     def _isQI(self,columnName):
         return True

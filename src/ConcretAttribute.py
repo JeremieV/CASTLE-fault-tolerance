@@ -29,3 +29,8 @@ class _ContinousAttributes(Attribute):
         else:
             result = range
         return result
+
+    def getGeneralization(self, range):
+        min = range[0]
+        max = range[1]
+        result = str(min)+"<=x<="+str(max)
