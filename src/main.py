@@ -36,25 +36,35 @@ async def stream():
             yield tuple(row)
             await asyncio.sleep(1)
     
-def Enlargement():
+def v_info_loss():
     pass
 
-def best_selection(t): 
-    E = set()
-    for C_j in gamma:
-        e = Enlargement(C_j, t)
-        E.add(e)
-    _min_ = min(E)
-    SetCMin = {c for c in gamma if Enlargement(c, t) == _min_}
-    for C_j in SetCMin:
-        pass
-    if len(SetCok) == 0:
-        if pass:
-            pass
-        else:
-            return None
-    else:
-        return a cluster in SetCMin with minimum size
+
+def info_loss(g:tuple):
+    """g is a tuple generalization."""
+    return sum([v_info_loss() for v in g]) * len(g)
+
+
+def Enlargement(C, t:tuple):
+
+    return sum([v_info_loss() - v_info_loss() for ]) / n
+
+# def best_selection(t): 
+#     E = set()
+#     for C_j in gamma:
+#         e = Enlargement(C_j, t)
+#         E.add(e)
+#     _min_ = min(E)
+#     SetCMin = {c for c in gamma if Enlargement(c, t) == _min_}
+#     for C_j in SetCMin:
+#         pass
+#     if len(SetCok) == 0:
+#         if pass:
+#             pass
+#         else:
+#             return None
+#     else:
+#         return a cluster in SetCMin with minimum size
 
 def delay_constraint(t):
     pass
