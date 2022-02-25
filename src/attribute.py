@@ -20,6 +20,13 @@ class Attribute(ABC):
     def getGeneralization(range):
         return NotImplementedError
 
+#private class
+#continous attributes
+class _conAttributes(Attribute):
+    def __init__(self,name,index):
+        pass
+
+
 #public class responsible for creating the attribute objects
 class AttributeFactory:
 
@@ -27,7 +34,10 @@ class AttributeFactory:
     #Call this to create a tuple of attribute objects 
     #from the first row of file
     def createAttributes(row):
+        #row is a list of strings
         return tuple()
+
+
 
 
 
