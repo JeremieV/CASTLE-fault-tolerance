@@ -1,6 +1,6 @@
 from copy import deepcopy
-from tuple_obj import TupleObj
 
+import main
 import random
 
 class Cluster(object):
@@ -14,14 +14,15 @@ class Cluster(object):
         self.ranges = {}
         for header in headers:
             self.ranges[header] = []
-        self.set_of_data = {}
-        for header in headers:
-            self.set_of_data[header] = []
+        # self.set_of_data = {}
+        # for header in headers:
+        #     self.set_of_data[header] = []
     
-    def add_to_cluster(self, t: TupleObj):
+    def add_to_cluster(self, t):
         """ Adds the tuple to the cluster and performs range enlargement if needed """
         self.tuples.append(t)
-        for attr_head, data in zip(t.attribute_headers, t.data):
+        for attr_head, data in zip(main.attribute_headers, t):
+            # update ranges of the attribute's values
             if len(self.ranges[attr_head]) == 0:
                 self.ranges[attr_head] = [data]
             elif len(self.ranges[attr_head]) == 1:
@@ -34,44 +35,30 @@ class Cluster(object):
                     self.ranges[attr_head][1] = data
                 elif data < self.ranges[attr_head][0]:
                     self.ranges[attr_head][0] = data
-            if not data in self.set_of_data[attr_head]:
-                self.set_of_data[attr_head] = data
+            # if not data in self.set_of_data[attr_head]:
+            #     self.set_of_data[attr_head].append(data)
 
-    def remove_from_cluster(self, t: TupleObj):
+    def remove_from_cluster(self, t):
         """ Removes a tuple from the cluster """
         self.tuples.remove(t)
 
-        # todo update the set_of_data to remove values if they are no longer in the cluster
-        
-
-    def get_generic(self, t: TupleObj):
+    def get_generic(self, t):
         """ Gets a generic form of tuple data from the selection in the cluster. 
             The output tuple has attributes for the range of possible values and a specific value taken from the set. """
-        gen_tuple = deepcopy(t)
-        print(gen_tuple.qi_attributes)
+        gen_tuple = {}
         for header, header_range in self.ranges.items():
             print(header)
-            if header in gen_tuple.qi_attributes:
-                # pick a random value for each heading from tuples in the store
-                gen_tuple.data.append(header_range[0])
-                random_tuple = random.choice(self.tuples)
-                for val, sample_header in zip(random_tuple.data, random_tuple.attribute_headers):
-                    print(sample_header)
-                    if header == sample_header:
-                        gen_tuple.data.append(val)
-                        print("appended val")
-                        break
-                gen_tuple.data.append(header_range[1])
-
-                # add headers to the gen_tuple for the range of values
-                gen_tuple.attribute_headers.append('min_' + header)
-                gen_tuple.attribute_headers.append('gen_' + header)
-                gen_tuple.attribute_headers.append('max_' + header)
-
-            gen_tuple.data.pop(gen_tuple.attribute_headers.index(header))
-            gen_tuple.attribute_headers.remove(header)
+            if header in main.quasi_identifiers:
+                gen_tuple['min_' + header] = header_range[0]
+                gen_tuple['max_' + header] = header_range[1]
 
         return gen_tuple
     
     def __len__(self):
+        """Returns the quantity of tuples in the cluster"""
         return len(self.tuples)
+
+    def count_distinct_tuples(self):
+        """Returns the quantity of distinct tuples in the cluster"""
+        set_tuples = set(self.tuples)
+        return len(set_tuples)

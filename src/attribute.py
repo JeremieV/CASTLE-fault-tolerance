@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import tuple_obj
 
 class Attribute(ABC):
     
