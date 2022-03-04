@@ -4,6 +4,7 @@ import asyncio
 from cluster import Cluster
 from attribute import Attribute
 from DataSet import DataSet
+from DataSetFactory import DataSetFactory
 
 # the attribute headers is a global value that is defined when the stream starts
 # for now the quasi-identifiers are defined to be all the attributes of the tuple
@@ -13,7 +14,7 @@ from DataSet import DataSet
 async def stream():
     """Opens a csv file and starts outputting its elements as a stream."""
     with open('datasets/credit_data.csv') as f:
-        data = DataSet(f)
+        data = DataSetFactory.createCreditData(f)
         attribute_headers = DataSet.Headers
         row = data.getNextTuple()
         while(row!=None):
