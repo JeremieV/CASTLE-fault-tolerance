@@ -4,6 +4,11 @@ import asyncio
 from cluster import Cluster
 from attribute import Attribute
 
+# global constants
+k = 100 # k-anonymity guarantee
+delta = 1 # maximum time delay (in seconds)
+beta = 10 # maximum number of non-anonymised clusters
+
 # the attribute headers is a global value that is defined when the stream starts
 # for now the quasi-identifiers are defined to be all the attributes of the tuple
 attribute_headers = None
@@ -23,8 +28,12 @@ async def stream():
             yield tuple(row)
             await asyncio.sleep(1)
     
-def v_info_loss():
-    pass
+def v_info_loss(attribute, u, l, U, L):
+    """Computes a General Loss Metric adapted to streaming data."""
+    if attribute.is_categorical():
+        return (S_v - 1) / (S - 1)
+    elif attribute.is_linear():
+        return (u - l) / (U - L)
 
 
 def info_loss(g:tuple):
@@ -53,8 +62,15 @@ def info_loss(g:tuple):
 #     else:
 #         return a cluster in SetCMin with minimum size
 
+def output_cluster(C: Cluster):
+    
+
 def delay_constraint(t):
-    pass
+    # let C be the non-k_s anonymized cluster to which t belongs
+    if len(C) >= k:
+        output_cluster(C) # what does that do
+    else:
+
 
 def ouptput_cluster(t):
     pass
@@ -85,7 +101,7 @@ if __name__ == "__main__":
     asyncio.run(process())
     # asyncio.run(castle(
     #     stream = stream(),
-    #     k = 1,
-    #     delta = 1,
-    #     beta = 1
+    #     k = k,
+    #     delta = delta,
+    #     beta = beta
     # ))
