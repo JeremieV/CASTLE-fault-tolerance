@@ -2,7 +2,8 @@ import csv
 import asyncio
 
 from cluster import Cluster
-from attribute import Attribute
+from Attribute import Attribute
+from DataSet import DataSet
 
 # global constants
 k = 100 # k-anonymity guarantee
@@ -17,7 +18,15 @@ quasi_identifiers = None
 async def stream():
     """Opens a csv file and starts outputting its elements as a stream."""
     with open('datasets/credit_data.csv') as f:
-        csv_reader = csv.reader(f)
+        data = DataSet(f)
+        attribute_headers = DataSet.Headers
+        row = data.getNextTuple()
+        while(row!=None):
+            row = data.getNextTuple()
+            yield row
+            await asyncio.sleep(1)
+
+        '''csv_reader = csv.reader(f)
         first_line = True
         for row in csv_reader:
             if first_line:
@@ -26,7 +35,7 @@ async def stream():
                 first_line = False
                 continue
             yield tuple(row)
-            await asyncio.sleep(1)
+            await asyncio.sleep(1)'''
     
 def v_info_loss(attribute, u, l, U, L):
     """Computes a General Loss Metric adapted to streaming data."""
