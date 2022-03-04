@@ -1,3 +1,4 @@
+from DGHFactory import DGHFactory
 from DataSet import DataSet
 
 #describes information about a column 
@@ -40,7 +41,7 @@ class DataSetFactory:
 
         #TODO
         #create DGH for default
-        defaultDGH = None
+        defaultDGH = DGHFactory.createCreditDefault()
         definition.addDef("default",False,defaultDGH)
 
         result = DataSet(file,definition)
