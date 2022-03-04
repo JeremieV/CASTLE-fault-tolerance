@@ -1,7 +1,7 @@
 #This file contains concret implementations of the abstract Attribute object
 #and shouldn't really be called outside of AttributeFactory
 
-from attribute import Attribute
+from Attribute import Attribute
 
 #private class
 #concret implementation of Attribute, represents continous attributes
