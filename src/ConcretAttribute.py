@@ -38,7 +38,6 @@ class _ContinousAttributes(Attribute):
 #private class
 #concret implementation of Attribute, represents catagorical attributes
 class _CategoricalAttributes(Attribute):
-    #TODO
     DHG = None
     LeftTraversal = None
 
@@ -83,4 +82,4 @@ class _CategoricalAttributes(Attribute):
         return result
 
     def getGeneralization(self, range):
-        return self.DHG.getLowestCommonAncestor(range) #TODO
+        return self.DHG.getLowestCommonAncestor(range[0],range[1])

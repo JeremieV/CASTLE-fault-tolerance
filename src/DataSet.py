@@ -14,10 +14,12 @@ from Attribute import Attribute,AttributeFactory
 class DataSet:
     csvreader = None
     Headers = None
+    definition = None
 
-    def __init__(self,file):
+    def __init__(self,file,definition):
         self.csv_reader = csv.reader(file)
         row = next(self.csv_reader)
+        self.definition=definition
         self.Headers = self.__createHeaders(row)
 
     #Returns the list of attributes which are quasi-identifiers
@@ -53,14 +55,12 @@ class DataSet:
         return tuple(resultList)
 
     #private method
-    #TODO
     #returns true if the column is a quasi-identifier
     def _isQI(self,columnName):
-        return True
+        return self.definition.isQI(columnName)
 
-    #TODO
     #private method
     #returns the DGH of a column if it exists
     #otherwise, return None
     def _getDGH(self,columnName):
-        return None
+        return self.definition.getDGH(columnName)
