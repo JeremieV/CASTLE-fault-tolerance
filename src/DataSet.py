@@ -1,7 +1,7 @@
 from ast import Import
 from contextlib import nullcontext
 import csv
-from Attribute import Attribute,AttributeFactory
+from attribute import Attribute,AttributeFactory
 
 #public class
 #represents the data set contained in a CSV file
