@@ -3,6 +3,9 @@ from ConcretAttribute import _CategoricalAttributes,_ContinousAttributes
 #I miss Java and c#
 
 #public abstract class
+#Represents a column in the DataSet
+#can perform certain calculations
+#for example, calculating the range of a list of values
 class Attribute(ABC):
     QI = False
     index = -1

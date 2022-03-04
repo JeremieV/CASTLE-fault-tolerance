@@ -5,6 +5,7 @@ from Attribute import Attribute,AttributeFactory
 
 #public class
 #represents the data set contained in a CSV file
+#describes the data stream
 #iterate through this like:
 # row = data.getNextTuple()
 # while(row!=null):
@@ -17,7 +18,20 @@ class DataSet:
     def __init__(self,file):
         self.csv_reader = csv.reader(file)
         row = next(self.csv_reader)
-        self.myHeader = self.__createHeaders(row)
+        self.Headers = self.__createHeaders(row)
+
+    #Returns the list of attributes which are quasi-identifiers
+    def getQuasiIdentifiers(self):
+        result = []
+        for attri in self.Headers:
+            if (attri.isQI()==True):
+                result.append(attri)
+        return result
+
+    #Returns all attributes in this dataset
+    def getAttributes(self):
+        return self.Headers
+
 
     #public method
     #returns the next tuple
