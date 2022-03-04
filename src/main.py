@@ -2,13 +2,13 @@ import csv
 import asyncio
 
 from cluster import Cluster
-from Attribute import Attribute
+from attribute import Attribute
 from DataSet import DataSet
 
 # the attribute headers is a global value that is defined when the stream starts
 # for now the quasi-identifiers are defined to be all the attributes of the tuple
-attribute_headers = None
-quasi_identifiers = None
+# attribute_headers = None
+# quasi_identifiers = None
 
 async def stream():
     """Opens a csv file and starts outputting its elements as a stream."""
