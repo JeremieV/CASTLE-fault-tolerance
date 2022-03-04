@@ -3,8 +3,9 @@ import asyncio
 import random
 
 from cluster import Cluster
-from Attribute import Attribute
+from attribute import Attribute
 from DataSet import DataSet
+from DataSetFactory import DataSetFactory
 
 # The parameters that affect the performance of CASTLE are: delta, k, the number of QI attributes, mu, beta, and the data distribution.
 
@@ -20,13 +21,13 @@ beta  = 50  # beta is the threshold for controlling the maximum number of non-ks
 
 # the attribute headers is a global value that is defined when the stream starts
 # for now the quasi-identifiers are defined to be all the attributes of the tuple
-attribute_headers = None
-quasi_identifiers = None
+# attribute_headers = None
+# quasi_identifiers = None
 
 async def stream():
     """Opens a csv file and starts outputting its elements as a stream."""
     with open('datasets/credit_data.csv') as f:
-        data = DataSet(f)
+        data = DataSetFactory.createCreditData(f)
         attribute_headers = DataSet.Headers
         row = data.getNextTuple()
         while(row!=None):

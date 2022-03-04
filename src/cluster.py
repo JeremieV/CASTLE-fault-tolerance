@@ -1,19 +1,23 @@
 from copy import deepcopy
 
-import main
+# import main
 import random
+from xml.dom.minidom import Attr
+from DataSet import DataSet
+from attribute import AttributeFactory
 
 class Cluster(object):
     
     """ A cluster object to store a collection of similar tuples """
 
-    def __init__(self, headers):
+    def __init__(self, ds: DataSet):
         # list of all tuples in the cluster
         self.tuples = []
         # generalised range of attribute values
         self.ranges = {}
-        for header in headers:
-            self.ranges[header] = []
+        for header in ds.Headers:
+            attr = AttributeFactory.createAttribute()
+            self.ranges[attribute] = []
         # self.set_of_data = {}
         # for header in headers:
         #     self.set_of_data[header] = []

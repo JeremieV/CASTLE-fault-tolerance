@@ -5,6 +5,7 @@ from Attribute import Attribute,AttributeFactory
 
 #public class
 #represents the data set contained in a CSV file
+#describes the data stream
 #iterate through this like:
 # row = data.getNextTuple()
 # while(row!=null):
@@ -13,11 +14,26 @@ from Attribute import Attribute,AttributeFactory
 class DataSet:
     csvreader = None
     Headers = None
+    definition = None
 
-    def __init__(self,file):
+    def __init__(self,file,definition):
         self.csv_reader = csv.reader(file)
         row = next(self.csv_reader)
-        self.myHeader = self.__createHeaders(row)
+        self.definition=definition
+        self.Headers = self.__createHeaders(row)
+
+    #Returns the list of attributes which are quasi-identifiers
+    def getQuasiIdentifiers(self):
+        result = []
+        for attri in self.Headers:
+            if (attri.isQI()==True):
+                result.append(attri)
+        return result
+
+    #Returns all attributes in this dataset
+    def getAttributes(self):
+        return self.Headers
+
 
     #public method
     #returns the next tuple
@@ -39,14 +55,12 @@ class DataSet:
         return tuple(resultList)
 
     #private method
-    #TODO
     #returns true if the column is a quasi-identifier
     def _isQI(self,columnName):
-        return True
+        return self.definition.isQI(columnName)
 
-    #TODO
     #private method
     #returns the DGH of a column if it exists
     #otherwise, return None
     def _getDGH(self,columnName):
-        return None
+        return self.definition.getDGH(columnName)
