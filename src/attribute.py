@@ -40,6 +40,14 @@ class Attribute(ABC):
     def createRange(self,values):
         return NotImplementedError
 
+    @abstractmethod
+    #given the range as a tuple
+    #return the information loss of a given generalization
+    #
+    #Note. the infoloss of a tuple is the average of the infoLoss of all its generalization
+    def calculateInfoLoss(self,range):
+        return NotImplementedError
+
     #given the current range (as a tuple of length 2) and new value
     #return the expanded range (as a tuple of length 2)
     @abstractmethod
