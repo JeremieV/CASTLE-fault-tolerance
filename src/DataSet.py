@@ -20,7 +20,7 @@ class DataSet:
         self.csv_reader = csv.reader(file)
         row = next(self.csv_reader)
         self.definition=definition
-        self.Headers = self.__createHeaders(row)
+        self.Headers = self._createHeaders(row)
 
     #Returns the list of attributes which are quasi-identifiers
     def getQuasiIdentifiers(self):

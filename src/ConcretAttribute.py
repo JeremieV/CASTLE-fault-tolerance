@@ -62,7 +62,7 @@ class _CategoricalAttributes(Attribute):
         min = range[0].getIndex()
         max = range[1].getIndex()
 
-        total = self.DHG.getLeaves().len()
+        total = len(self.DHG.getLeaves())
         return (max-min)/(total-1)
 
     def createRange(self,values):
