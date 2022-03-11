@@ -1,3 +1,4 @@
+from random import random
 
 class CASTLE:
 
@@ -9,6 +10,8 @@ class CASTLE:
     #maximum number of non k-anonymized clusters that we can store
     BETA = 5
 
+    tau = 0
+
     #class variables
     # set of k_s anonymized clusters
     gamma = []
@@ -17,7 +20,6 @@ class CASTLE:
 
     #tuple is the new row read from the stream
     def readTuple(self,tuple,delta):
-        tau = 0
 
         C = self.best_selection(tuple)
         if C is None:
@@ -27,6 +29,17 @@ class CASTLE:
         t_prime = tuple.p - delta # ??
         # if t_prime has not yet been output:
         #     delay_constraint(t_prime)
+    
+    #TODO
+    #return the information loss of a cluster
+    #if a tuple is supplied, then return the info loss of the enlarged cluster
+    def getInfoLoss(cluster,tuple=None):
+        if (tuple==None):
+            return cluster.getInfoLoss()
+        else:
+            #enlarge
+            pass
+
 
     #TODO
     def createCluster(self,tuple):
@@ -34,27 +47,28 @@ class CASTLE:
     
     #return the cluster whose enlargement results in the smallest information loss
     def best_selection(self,t): 
-        E = set()
-        for C_j in self.gamma:
-            e = Enlargement(C_j, t)
-            E.add(e)
-        _min_ = min(E)
+        minEnlargement=0
+        minClusters = {}
+        for cluster in self.gamma:
+            enlargedLoss = CASTLE.getInfoLoss(cluster, t)
+            val = enlargedLoss-cluster.getInfoLoss()
 
-        SetCMin = {c for c in self.gamma if Enlargement(c, t) == _min_}
+            if (val<minEnlargement):
+                minEnlargement=val
+                minClusters = {}
+
+            if (val==minEnlargement): 
+                minClusters[cluster] = enlargedLoss
+                
         SetCok=[]
-        for C_j in SetCMin:
-            #info_loss is the information loss of c_j after enlargement
-            #TODO
-            info_loss = None
-            if (info_loss<=self.tau):
-                SetCok.append(C_j)
+        for cluster in minClusters:
+            if (minClusters[cluster]<=self.tau):
+                SetCok.append(cluster)
 
         if len(SetCok) == 0:
             if (len(self.gamma)>=self.BETA):
-                #result = any cluster is setC<om with the minimum size
-                return result
+                return random.choice(minClusters)
             else:
                 return None
         else:
-            #result = a cluster in SetCMin with minimum size
-            return result
+            return random.choice(SetCok)
