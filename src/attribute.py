@@ -56,7 +56,7 @@ class Attribute(ABC):
 
 
 
-#public class responsible for creating the attribute objects
+#public class responsible for instantiating the attribute objects
 class AttributeFactory:
 
     #Call this to create a tuple of attribute objects 
