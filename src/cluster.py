@@ -16,9 +16,10 @@ class Cluster(object):
         self.tuples = []
         # generalised range of attribute values
         self.ranges = {}
-        for attr in ds.getQuasiIdentifiers():
+        # for attr in ds.getQuasiIdentifiers():
+        for attr in ds.getAttributes():
             self.ranges[attr] = []
-        self.ds = ds
+        self.ds: DataSet = ds
     
     def add_to_cluster(self, t):
         """ Adds the tuple to the cluster and performs range enlargement if needed """
@@ -26,35 +27,33 @@ class Cluster(object):
         for attribute, data in zip(self.ds.getAttributes(), t):
             if (attribute.isQI()):
                 self.ranges[attribute] = attribute.expandRange(self.ranges[attribute], data)
-            # update ranges of the attribute's values
-            # if len(self.ranges[attr_head]) == 0:
-            #     self.ranges[attr_head] = [data]
-            # elif len(self.ranges[attr_head]) == 1:
-            #     if data > self.ranges[attr_head][0]:
-            #         self.ranges[attr_head].append(data)
-            #     elif data < self.ranges[attr_head][0]:
-            #         self.ranges[attr_head].insert(0, data)
-            # elif len(self.ranges[attr_head]) == 2:
-            #     if data > self.ranges[attr_head][1]:
-            #         self.ranges[attr_head][1] = data
-            #     elif data < self.ranges[attr_head][0]:
-            #         self.ranges[attr_head][0] = data
-            # if not data in self.set_of_data[attr_head]:
-            #     self.set_of_data[attr_head].append(data)
 
     def remove_from_cluster(self, t):
         """ Removes a tuple from the cluster """
         self.tuples.remove(t)
 
-    def get_generic(self):
-        """ Gets a generic form of tuple data from the selection in the cluster. 
-            The output tuple has attributes for the range of possible values and a specific value taken from the set. """
-        gen_tuple = {}
-        for attr, attr_range in self.ranges.items():
-            # gen_tuple['min_' + attr.getName()] = attr_range[0]
-            # gen_tuple['max_' + attr.getName()] = attr_range[1]
-            gen_tuple[attr.getName()] = attr.getGeneralization((gen_tuple[attr.getName()][0], gen_tuple[attr.getName()][1]))
-        return gen_tuple
+    def output_cluster(self):
+        """ Outputs a string representing an anonymised form of the cluster of tuples where quasi-identifiers 
+            are replaced with ranges of values that appear in the cluster for that attribute"""
+        output_string = ""
+        for tuple in self.tuples:
+            output_string = output_string + self.get_generic(tuple) + "\n"
+
+        return output_string
+
+
+    def get_generic(self, tuple):
+        """ Gets a generic form of a tuple where quasi-identifiers are replaced with ranges of values 
+            that appear in the cluster for that attribute """
+        output_string = ""
+        for attr in self.ds.getAttributes():
+            if attr.isQi():
+                output_string = output_string + attr.getName() + attr.getGeneralization(self.attrRange) + " "
+            else:
+                non_quasi_value = attr.getValue(tuple)
+                non_quasi_range = [non_quasi_value, non_quasi_value]
+                output_string = output_string + attr.getName() + attr.getGeneralization(non_quasi_range) + " "
+        return output_string
     
     def __len__(self):
         """Returns the quantity of tuples in the cluster"""
