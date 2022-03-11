@@ -19,16 +19,40 @@ class CASTLE:
     omega = [] 
 
     #tuple is the new row read from the stream
-    def readTuple(self,tuple,delta):
+    def readTuple(self,tuple,time):
 
         C = self.best_selection(tuple)
         if C is None:
             self.gamma.add(self.createCluster(tuple))
         else:
             C.add(tuple)
-        t_prime = tuple.p - delta # ??
-        # if t_prime has not yet been output:
-        #     delay_constraint(t_prime)
+
+        return self.getOutput(time)
+
+    #TODO
+    #return the time that the tuple was received from the data stream
+    def getTimeReceived(self,tuple):
+        return NotImplementedError
+
+    #TODO
+    #return an list of tuples that needs to be outputted
+    def __getStaleTuples(self,time):
+        t_prime = time - self.DELTA
+        return NotImplementedError
+
+    #TODO
+    def getOutput(self,time):
+        tuples = self.__getStaleTuples(time)
+
+        if (len(tuples)==0):
+            return []
+        else:
+            pass
+           # self.delay_constraint(t_prime)
+            return NotImplementedError
+
+    def delay_constraint(self,tuple):
+        return NotImplementedError
     
     #TODO
     #return the information loss of a cluster
