@@ -5,7 +5,7 @@ from pickle import TRUE
 import random
 from xml.dom.minidom import Attr
 from DataSet import DataSet
-from attribute import Attribute
+from Attribute import Attribute
 
 class Cluster(object):
     
