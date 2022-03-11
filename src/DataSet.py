@@ -31,7 +31,7 @@ class DataSet:
         return result
 
     #Returns all attributes in this dataset
-    def getAttributes(self):
+    def getAttributes(self) -> list(Attribute):
         return self.Headers
 
 
