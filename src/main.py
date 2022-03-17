@@ -88,8 +88,9 @@ def output_cluster(C: Cluster, tau: float, gamma: set[Cluster], omega: list[Clus
     else:
         sc = [C]
     for c in sc:
-        # output all tuples in ci with its generalization
-
+        # output all tuples in c with its generalization
+        # TODO
+        c = 
         # tau is updated to be the average information loss of the mu most recent ks-anonymized clusters including the new ones
         tau = sum(info_loss(cl) for cl in omega[:-mu]) / mu
         if info_loss(c) < tau:
