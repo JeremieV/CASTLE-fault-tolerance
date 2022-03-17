@@ -3,7 +3,7 @@ import asyncio
 import random
 
 from cluster import Cluster
-from attribute import Attribute
+from Attribute import Attribute
 from DataSet import DataSet
 from DataSetFactory import DataSetFactory
 

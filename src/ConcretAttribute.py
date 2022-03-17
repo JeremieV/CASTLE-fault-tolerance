@@ -7,6 +7,10 @@ from Attribute import Attribute
 #concret implementation of Attribute, represents continous attributes
 class _ContinousAttributes(Attribute):
 
+    #defines the domain of this attribute
+    #all values of the attribute must fall within the domain
+    domain = [0,0]
+
     def __init__(self,name,index):
         self.name = name
         self.index = index
@@ -30,6 +34,12 @@ class _ContinousAttributes(Attribute):
             result = range
         return result
 
+    def calculateInfoLoss(self,range):
+        min = range[0]
+        max = range[1]
+        return (max-min)/(self.domain[1]-self.domain[0])
+
+
     def getGeneralization(self, range):
         min = range[0]
         max = range[1]
@@ -48,7 +58,13 @@ class _CategoricalAttributes(Attribute):
         self.LeftTraversal = self.DHG.getLeftTraversal() #TODO
 
 
-       
+    def calculateInfoLoss(self,range):
+        min = range[0].getIndex()
+        max = range[1].getIndex()
+
+        total = len(self.DHG.getLeaves())
+        return (max-min)/(total-1)
+
     def createRange(self,values):
         min = None
         max = None

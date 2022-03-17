@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
+from xmlrpc.client import boolean
 from ConcretAttribute import _CategoricalAttributes,_ContinousAttributes
-#I miss Java and c#
+from __future__ import annotations
 
 #public abstract class
 #Represents a column in the DataSet
@@ -12,7 +13,7 @@ class Attribute(ABC):
     name = ""
 
     #returns true if this attribute is a quasi-identifier
-    def isQI(self):
+    def isQI(self) -> boolean:
         return self.QI
 
     #return the value of this attribute in the given tuple
@@ -23,7 +24,7 @@ class Attribute(ABC):
             return tuple[self.index]
 
     #returns the name of the column, used for printing
-    def getName(self):
+    def getName(self) -> str:
         return self.name
 
     #returns the generalized value  (as a string)
@@ -40,6 +41,14 @@ class Attribute(ABC):
     def createRange(self,values):
         return NotImplementedError
 
+    @abstractmethod
+    #given the range as a tuple
+    #return the information loss of a given generalization
+    #
+    #Note. the infoloss of a tuple is the average of the infoLoss of all its generalization
+    def calculateInfoLoss(self,range) -> float:
+        return NotImplementedError
+
     #given the current range (as a tuple of length 2) and new value
     #return the expanded range (as a tuple of length 2)
     @abstractmethod
@@ -48,7 +57,7 @@ class Attribute(ABC):
 
 
 
-#public class responsible for creating the attribute objects
+#public class responsible for instantiating the attribute objects
 class AttributeFactory:
 
     #Call this to create a tuple of attribute objects 
