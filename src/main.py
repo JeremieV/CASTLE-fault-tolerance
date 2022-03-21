@@ -145,7 +145,7 @@ async def process():
 
 
 if __name__ == "__main__":
-    asyncio.run(process())
+    # asyncio.run(process())
     # asyncio.run(castle(
     #     stream = stream(),
     #     k = k,
