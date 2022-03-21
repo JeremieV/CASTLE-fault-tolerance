@@ -39,9 +39,9 @@ class DataSetFactory:
         definition.addDef("age",True)
         definition.addDef("loan",False)
 
-        #TODO
-        #create DGH for default
-        defaultDGH = DGHFactory.createCreditDefault()
+        # I'm not great at python so calling the factory class like this
+        fac = DGHFactory()
+        defaultDGH = fac.createCreditDefault()
         definition.addDef("default",False,defaultDGH)
 
         result = DataSet(file,definition)
