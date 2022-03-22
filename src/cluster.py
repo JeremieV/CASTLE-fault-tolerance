@@ -24,6 +24,7 @@ class Cluster(object):
     def add_to_cluster(self, t):
         """ Adds the tuple to the cluster and performs range enlargement if needed """
         self.tuples.append(t)
+        attribute: Attribute
         for attribute, data in zip(self.ds.getAttributes(), t):
             if (attribute.isQI()):
                 self.ranges[attribute] = attribute.expandRange(self.ranges[attribute], data)
@@ -40,14 +41,29 @@ class Cluster(object):
             output_string = output_string + self.get_generic(tuple) + "\n"
 
         return output_string
+    
+    def get_buckets(self) -> list(list(tuple)):
+        """group tuples into 'buckets' that share the same pid value"""
+        buck_dict: dict(list()) = {}
+        buckets: list(list(tuple)) = list(list())
+        for tuple in self.tuples:
+            for attr, data in zip(self.ds.getAttributes(), tuple):
+                if attr.isPID():
+                    buck_list: list() = buck_dict.get(data)
+                    buck_list.append(tuple)
+                    break
+        for bucket in buck_dict.values():
+            buckets.append(bucket)
+        return buckets
 
 
     def get_generic(self, tuple):
         """ Gets a generic form of a tuple where quasi-identifiers are replaced with ranges of values 
             that appear in the cluster for that attribute """
         output_string = ""
+        attr: Attribute
         for attr in self.ds.getAttributes():
-            if attr.isQi():
+            if attr.isQI:
                 output_string = output_string + attr.getName() + attr.getGeneralization(self.attrRange) + " "
             else:
                 non_quasi_value = attr.getValue(tuple)

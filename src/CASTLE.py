@@ -1,4 +1,11 @@
+from heapq import heapify
+import heapq
+from http.client import UnimplementedFileMode
 from random import random
+
+from cluster import Cluster
+from heap_node import HeapNode
+from my_heap import MyHeap
 
 class CASTLE:
 
@@ -22,7 +29,7 @@ class CASTLE:
     #tuple is the new row read from the stream
     def readTuple(self,tuple,time):
 
-        C = self.best_selection(tuple)
+        C = self.best_selection(tuple, self.gamma)
         if C is None:
             self.gamma.add(self.createCluster(tuple))
         else:
@@ -138,11 +145,11 @@ class CASTLE:
     def createCluster(self,tuple):
         return NotImplementedError
     
-    #return the cluster whose enlargement results in the smallest information loss
-    def best_selection(self,t): 
+    #return the cluster from set of given clusters whose enlargement results in the smallest information loss
+    def best_selection(self,t,candidate_clusters): 
         clusters = {}
         infoLoss = {}
-        for cluster in self.gamma:
+        for cluster in candidate_clusters:
             infoLoss[cluster] = CASTLE.getInfoLoss(cluster, t)
             val = infoLoss[cluster]-cluster.getInfoLoss()
             clusters[cluster] = val
@@ -161,3 +168,54 @@ class CASTLE:
                 return None
         else:
             return random.choice(SetCok)
+
+
+    def split(self, C: Cluster):
+        sc = list()
+        # let BS be the buckets created by grouping tuples in C by pid attribute
+        bs: list(list(tuple)) = C.get_buckets
+        while len(bs) >= self.K:
+            Bbar: list(tuple) = random.choice(bs)
+            tbar: tuple = random.choice(Bbar)
+            Bbar.remove(tbar)               # assuming this step is required
+            # create a new sub-cluster Cnew over tbar 
+            Cnew: Cluster = Cluster(C.ds)
+            Cnew.add_to_cluster(tbar)
+            if len(Bbar) == 0:
+                bs.remove(Bbar)
+            heap = MyHeap(self.K)
+            # red_bs is BS\Bbar
+            red_bs: list() = bs.copy()
+            if Bbar in red_bs:
+                red_bs.remove(Bbar)
+            for bucket in red_bs:
+                t: tuple = bucket[0]
+                t_dist = self.calc_distance(tbar, t)
+                heap_node: HeapNode = HeapNode(t, t_dist)
+                # if t is closer to tbar than the root of H_(k-1):
+                    # t replaces the root, and H_(k-1) is adjusted accordingly
+                heap.add_to_heap(heap_node)
+            node: HeapNode
+            for node in heap.my_heap:
+                tbar: tuple = node.get_tuple
+                Cnew.add_to_cluster(tbar)
+                # Let B_j be the bucket containing tbar
+                for B_j in red_bs:
+                    if tbar in B_j:
+                        B_j.remove(tbar)
+                        if len(B_j) == 0:
+                            red_bs.remove(B_j)
+                        break
+            sc.append(Cnew)
+        for B_i in bs:
+            t_i = random.choice(B_i)
+            nearest_cluster: Cluster = self.best_selection(t_i, sc)
+            for t in B_i:
+                nearest_cluster.add_to_cluster(t)
+            bs.remove(B_i)
+        return sc
+
+    #TODO
+    # return the distance between the two tuples
+    def calc_distance(self, tbar, t):
+        return NotImplementedError
