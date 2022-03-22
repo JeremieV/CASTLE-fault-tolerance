@@ -70,6 +70,31 @@ def ouptput_cluster(t):
     pass
 
 def split(C):
+    # initialise SC to be empty
+    # let BS be the buckets created by grouping tuples in C by pid attribute
+    # while |BS|>=k:
+        # Randomly select a bucket Bbar from BS and pick one of its tuples tbar
+        # create a bew sub-cluster Cnew over tbar
+        # if Bbar is empty:
+            # delete Bbar
+        # let H_(k-1) be a heap with k-1 nodes, each with an infinite distance to tbar
+        # foreach bucket in BS\Bbar do
+            # pick one of its tuples t, and calculate t's distance to tbar
+            # if t is closer to tbar than the root of H_(k-1):
+                # t replaces the root, and H_(k-1) is adjusted accordingly
+        # foreach node in H_(k-1):
+            # let tbar be the tuple in the node
+            # insert tbar into Cnew
+            # Let B_j be the bucket containing tbar
+            # delete tbar from B_j
+            # if B_j is empty:
+                # delete B_j
+        # add Cnew to SC
+    # foreach B_i in BS:
+        # pick a tuple t_i in B_i
+        # find t_i's nearest cluster in SC, and add all the tuples in B_i to it
+        # delete B_i
+    # return SC
     pass
 
 async def castle(stream, k, delta, beta):
