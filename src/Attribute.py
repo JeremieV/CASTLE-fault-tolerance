@@ -11,6 +11,7 @@ class Attribute(ABC):
     QI = False
     index = -1
     name = ""
+    PID = False
 
     #returns true if this attribute is a quasi-identifier
     def isQI(self) -> boolean:
@@ -27,6 +28,10 @@ class Attribute(ABC):
     def getName(self) -> str:
         return self.name
 
+    
+    def isPID(self):
+        return self.PID
+
     #returns the generalized value  (as a string)
     #of this attribute according to the given range
     #
@@ -34,6 +39,7 @@ class Attribute(ABC):
     @abstractmethod
     def getGeneralization(self,range):
         return NotImplementedError
+
     
     #given a list of values,
     #return a tuple representing the range
@@ -63,12 +69,13 @@ class AttributeFactory:
     #Call this to create a tuple of attribute objects 
     #from the first row of file
     #if a DHG is given, then we know this is a categorical attribute
-    def createAttribute(name,index,QI,DHG=None):
+    def createAttribute(name,index,QI,PID,DHG=None):
         result = None
         if (DHG==None):
             result = _ContinousAttributes(name,index)
         else:
             result = _CategoricalAttributes(name,index,DHG)
+        result.PID=PID
         result.QI = QI
         return result
 

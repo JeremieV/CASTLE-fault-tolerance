@@ -51,13 +51,19 @@ class DataSet:
             i += 1
             QI = self._isQI(column)
             DGH = self._getDGH(column)
-            resultList.append(AttributeFactory.createAttribute(name,index,QI,DGH))
+            PID = self._isPID(column)
+            resultList.append(AttributeFactory.createAttribute(name,index,QI,PID,DGH))
         return tuple(resultList)
 
     #private method
     #returns true if the column is a quasi-identifier
     def _isQI(self,columnName):
         return self.definition.isQI(columnName)
+
+    #private method
+    #returns true if the column is a quasi-identifier
+    def _isPID(self,columnName):
+        return self.definition.isPID(columnName)
 
     #private method
     #returns the DGH of a column if it exists
