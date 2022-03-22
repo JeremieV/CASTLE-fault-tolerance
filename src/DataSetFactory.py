@@ -9,6 +9,8 @@ class ColumnDefinition:
     #dictionary to store the DHG of a column
     DGHMap = {}
 
+    PIDName = ""
+
     def addDef(self,columnName,QI,DGH=None):
         self.QIMap[columnName] = QI
         if (DGH!=None):
@@ -16,6 +18,9 @@ class ColumnDefinition:
 
     def isQI(self,columnName):
         return self.QIMap[columnName]
+    
+    def isPID(self,columnName):
+        return columnName==self.PIDName
 
     def getDGH(self,columnName):
         if (columnName in self.DGHMap):
@@ -38,6 +43,7 @@ class DataSetFactory:
         definition.addDef("clientid",False)
         definition.addDef("age",True)
         definition.addDef("loan",False)
+        definition.PIDName = "clientid"
 
         # I'm not great at python so calling the factory class like this
         fac = DGHFactory()
