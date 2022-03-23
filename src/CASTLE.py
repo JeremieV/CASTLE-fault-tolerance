@@ -71,10 +71,11 @@ class CASTLE:
     def getOutput(self) ->List[Tuple]:
         staleTupleIndex = self.nextTupleIndex-1-self.DELTA
         staleTuple = self.allTuples[staleTupleIndex]
+        self.allTuples[staleTupleIndex] = None
         if (staleTuple is None):
             return []
         else:
-            self.delay_constraint(staleTuple)
+            return self.delay_constraint(staleTuple)
 
     #returns a string tuple
     #
@@ -165,23 +166,28 @@ class CASTLE:
 
         self.recentClusters.append(newCluster)
 
+    #where cluster is the cluster to be outputted
     def outputCluster(self, cluster:Cluster) -> List[Tuple]:
         clusters:List[Cluster] = [cluster]
 
+        #we split the cluster when suitable
         if (cluster.size()>=2*self.K):
             clusters = cluster.split()
 
         result:List[Tuple] = []
         for c in clusters:
             result.extend(c.output_cluster())
-            self.recalculateTau(c)
+            for t in c.tuples:
+                self.allTuples[t.getIndex()] = None
 
+            self.recalculateTau(c)
             if (c.get_info_loss()<self.tau):
                 self.omega.append(c)
-            else:
+           # else:
                 #delete C???
-                return NotImplementedError
+            #    return NotImplementedError
             self.gamma.remove(c)
+        return result
 
 
     def createCluster(self,t:TupleWrapper)->Cluster:
