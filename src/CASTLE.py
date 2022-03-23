@@ -107,10 +107,10 @@ class CASTLE:
         return self.outputCluster(mergedCluster)
 
 
-    def mergeClusters(self,c:Cluster,clusters:List[Cluster])->Cluster:
-        merged : Dict[Cluster,int] = {}
+    def mergeClusters(self, c: Cluster, clusters: list(Cluster)):
+        merged= {}
         for cluster in clusters:
-            merged[cluster] = self.getEnlargedInfoLoss(c,cluster)
+            merged[cluster] = self.calc_enlargement(c,cluster)
         
         minCluster = min(merged,key=merged.get)
         c.enlarge(minCluster)
@@ -119,6 +119,21 @@ class CASTLE:
             return c
         clusters.remove(minCluster)
         return self.mergeClusters(c,clusters)
+    
+    # info loss score for adding c1 to c2
+    def calc_enlargement(self, c1: Cluster, c2: Cluster):
+        new_ranges = {}
+        sum_info_loss = 0
+        attributes = c2.ds.getAttributes
+        for attr_pos in range(len(attributes)): #this could change to be myAttributes instead?
+            attr: Attribute = attributes[attr_pos]
+            range = []
+            for tuple in c1.tuples:
+                if attr.isQI:
+                    range = attr.expandRange(c2.ranges[attr], tuple[attr_pos])
+            new_ranges[attr] = range
+            sum_info_loss += attr.calculateInfoLoss(range)
+        return sum_info_loss
 
     #TODO
     #return the maximum generalization for each QI
@@ -148,33 +163,17 @@ class CASTLE:
             clusters = cluster.split()
 
         result = ""
+        c: Cluster
         for c in clusters:
             result += c.output()
             self.recalculateTau(c)
 
-            if (self.getEnlargedInfoLoss(c)<self.tau):
+            if (c.get_info_loss()<self.tau):
                 self.omega.append(c)
             else:
                 #delete C???
                 return NotImplementedError
             self.gamma.remove(c)
-
-    
-    #return the information loss of a cluster
-    #if a tuple is supplied, then return the info loss of the enlarged cluster
-    def getEnlargedInfoLoss(self,cluster: Cluster,tuple:TupleWrapper=None) -> float:
-        if (tuple==None):
-            return cluster.get_info_loss()
-        else:
-            sum_info_loss:float = 0
-            n:int = 0
-
-            for attribute in self.myAttributes:
-                if (attribute.isQI()):
-                    newRange = attribute.expandRange(cluster.ranges[attribute],attribute.getValue(tuple))
-                    sum_info_loss += attribute.calculateInfoLoss(newRange)
-                    n += 1
-            return sum_info_loss/n
 
 
     #TODO
@@ -185,9 +184,10 @@ class CASTLE:
     def best_selection(self,t:TupleWrapper,candidate_clusters:List[Cluster]): 
         clusters = {}
         infoLoss = {}
+        cluster: Cluster
         for cluster in candidate_clusters:
-            infoLoss[cluster] = self.getInfoLoss(cluster, t)
-            val = infoLoss[cluster]-cluster.getInfoLoss()
+            infoLoss[cluster] = cluster.get_info_loss(t)
+            val = infoLoss[cluster]-cluster.get_info_loss()
             clusters[cluster] = val
         minValue = min(clusters.itervalues())
         minClusters = [k for k, v in clusters.iteritems() if v == minValue]

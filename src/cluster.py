@@ -29,6 +29,10 @@ class Cluster(object):
             if (attribute.isQI()):
                 self.ranges[attribute] = attribute.expandRange(self.ranges[attribute], data)
 
+    # todo
+    def enlarge(self, tuples: list(tuple)):
+        pass
+
     def remove_from_cluster(self, t):
         """ Removes a tuple from the cluster """
         self.tuples.remove(t)
@@ -71,6 +75,21 @@ class Cluster(object):
                 output_string = output_string + attr.getName() + attr.getGeneralization(non_quasi_range) + " "
         return output_string
     
+    #return the information loss of a cluster
+    #if a tuple is supplied, then return the info loss of the enlarged cluster
+    def get_info_loss(self, tuple):
+        sum_info_loss = 0
+        n = 0
+        for clus_tuple in self.tuples:
+            attribute: Attribute
+            for attribute, data in zip(self.ds.getAttributes(), tuple):
+                # if not a QI, the range will be 0 so the info loss will be 0
+                if attribute.isQI:
+                    new_range = attribute.expandRange(self.ranges[attribute], data)
+                    sum_info_loss += attribute.calculateInfoLoss(new_range)
+                    n += 1
+        return sum_info_loss/n
+
     def get_info_loss(self):
         sum_info_loss = 0
         n = 0
