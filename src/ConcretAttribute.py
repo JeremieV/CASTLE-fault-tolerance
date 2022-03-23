@@ -135,4 +135,4 @@ class _CategoricalAttributes(Attribute):
     def calc_distance(self, tbar: TupleWrapper, t: TupleWrapper) -> float:
         val_1 = self.getValue(tbar)
         val_2 = self.getValue(t)
-        return pow(self.LeftTraversal.index(val_1)-self.LeftTraversal.index(val_1), 2)
+        return pow(self.LeftTraversal.index(val_1)-self.LeftTraversal.index(val_2), 2)
