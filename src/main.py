@@ -25,9 +25,9 @@ beta  = 50  # beta is the threshold for controlling the maximum number of non-ks
 
 async def stream(data):
     """Opens a csv file and starts outputting its elements as a stream."""
-    row = data.getNextTuple()
+    row = data.getNextRow()
     while(row!=None):
-        row = data.getNextTuple()
+        row = data.getNextRow()
         print("read")
         yield row
         await asyncio.sleep(1)

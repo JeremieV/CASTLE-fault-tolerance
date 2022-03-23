@@ -40,7 +40,7 @@ class DataSet:
     #public method
     #returns the next tuple
     def getNextRow(self):
-        return next(self.csvreader)
+        return next(self.csv_reader)
 
     #private method
     #returns a tuple of attributes
