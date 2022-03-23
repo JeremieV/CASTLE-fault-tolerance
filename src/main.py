@@ -3,8 +3,6 @@ import asyncio
 import random
 from CASTLE import CASTLE
 
-from cluster import Cluster
-from Attribute import Attribute
 from DataSet import DataSet
 from DataSetFactory import DataSetFactory
 

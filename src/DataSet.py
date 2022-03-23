@@ -1,7 +1,9 @@
 from ast import Import
 from contextlib import nullcontext
 import csv
-from Attribute import Attribute,AttributeFactory
+from Attribute import Attribute
+from typing
+from ConcretAttribute import AttributeFactory
 
 #public class
 #represents the data set contained in a CSV file
@@ -31,7 +33,7 @@ class DataSet:
         return result
 
     #Returns all attributes in this dataset
-    def getAttributes(self) -> list(Attribute):
+    def getAttributes(self) -> List[Attribute]:
         return self.Headers
 
 

@@ -4,7 +4,6 @@ from http.client import UnimplementedFileMode
 from math import gamma
 from random import random
 import string
-from Attribute import Attribute
 from DataSet import DataSet
 
 from cluster import Cluster

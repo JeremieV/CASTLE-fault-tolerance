@@ -6,13 +6,30 @@ from typing import Tuple,List
 from Attribute import Attribute
 from DHG import DHG
 
+
+#public class responsible for instantiating the attribute objects
+class AttributeFactory:
+
+    #Call this to create a tuple of attribute objects 
+    #from the first row of file
+    #if a DHG is given, then we know this is a categorical attribute
+    def createAttribute(name,index,QI,PID,DHG=None):
+        result = None
+        if (DHG==None):
+            result = _ContinousAttributes(name,index)
+        else:
+            result = _CategoricalAttributes(name,index,DHG)
+        result.PID=PID
+        result.QI = QI
+        return result
+
 #private class
 #concret implementation of Attribute, represents continous attributes
 class _ContinousAttributes(Attribute):
 
     #defines the domain of this attribute
     #all values of the attribute must fall within the domain
-    domain = [0,sys.maxint]
+    domain = [0,69696969]
 
     def __init__(self,name,index):
         self.name = name

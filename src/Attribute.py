@@ -1,7 +1,6 @@
-from abc import ABC, abstractmethod
-from xmlrpc.client import boolean
-from ConcretAttribute import _CategoricalAttributes,_ContinousAttributes
 from __future__ import annotations
+from abc import ABC, abstractmethod
+
 from tupleWrapper import TupleWrapper
 from typing import Tuple,List,Dict
 from DHG import DHG
@@ -69,22 +68,6 @@ class Attribute(ABC):
         return NotImplementedError
 
 
-
-#public class responsible for instantiating the attribute objects
-class AttributeFactory:
-
-    #Call this to create a tuple of attribute objects 
-    #from the first row of file
-    #if a DHG is given, then we know this is a categorical attribute
-    def createAttribute(name,index,QI,PID,DHG=None):
-        result = None
-        if (DHG==None):
-            result = _ContinousAttributes(name,index)
-        else:
-            result = _CategoricalAttributes(name,index,DHG)
-        result.PID=PID
-        result.QI = QI
-        return result
 
 
 

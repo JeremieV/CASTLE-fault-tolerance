@@ -1,4 +1,5 @@
 from DHGTreeNode import DHGTreeNode
+from typing import List
  
 class DHG:
 
@@ -45,7 +46,7 @@ class DHG:
         return self.root.countNodeLeaves()
 
     
-    def getLeftTraversal(self) -> list(DHGTreeNode):
+    def getLeftTraversal(self) -> List[DHGTreeNode]:
         return self.root.traverseLeft()
     
     def getRoot(self):

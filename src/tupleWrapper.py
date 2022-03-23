@@ -1,5 +1,4 @@
 from typing import List, Tuple
-from cluster import Cluster
 
 class TupleWrapper(object):
 
