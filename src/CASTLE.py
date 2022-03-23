@@ -8,7 +8,8 @@ from cluster import Cluster
 from heap_node import HeapNode
 from my_heap import MyHeap
 from Attribute import Attribute
-
+from typing import Tuple
+from tupleWrapper import TupleWrapper
 class CASTLE:
 
     #declaring contants
@@ -43,37 +44,32 @@ class CASTLE:
 
     #tuple is the new row read from the stream
     #return a list of tuples 
-    def readTuple(self,tuple,time):
-
-        C = self.best_selection(tuple, self.gamma)
+    def readTuple(self,tuple):
+        newTuple = self.createWrapper(tuple)
+        C = self.best_selection(newTuple, self.gamma)
         if C is None:
-            self.gamma.add(self.createCluster(tuple))
+            self.gamma.add(self.createCluster(newTuple))
         else:
-            C.add(tuple)
+            C.add(newTuple)
+        return self.getOutput()
 
-        return self.getOutput(time)
+    def createWrapper(self,t:Tuple) -> TupleWrapper:
+        result = TupleWrapper(t,self.nextTupleIndex)
+        self.allTuples[self.nextTupleIndex] = result
+        self.nextTupleIndex= self.nextTupleIndex+1
+        return result
 
-    #TODO
-    #return the time that the tuple was received from the data stream
-    def getTimeReceived(self,tuple):
-        return NotImplementedError
-
-    #TODO
-    #return an list of tuples that needs to be outputted
-    def __getStaleTuples(self,time):
-        t_prime = time - self.DELTA
-        return NotImplementedError
 
     #TODO
-    def getOutput(self,time):
-        tuples = self.__getStaleTuples(time)
+    def getOutput(self):
+        staleTupleIndex = self.nextTupleIndex-1-self.DELTA
+        staleTuple = self.allTuples[staleTupleIndex]
 
-        if (len(tuples)==0):
-            return []
+
+        if (staleTuple is None):
+            return ()
         else:
-            pass
-           # self.delay_constraint(t_prime)
-            return NotImplementedError
+            self.delay_constraint(staleTuple)
 
     #returns a string
     def delay_constraint(self,tuple):
