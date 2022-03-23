@@ -47,3 +47,6 @@ class DHG:
     
     def getLeftTraversal(self) -> list(DHGTreeNode):
         return self.root.traverseLeft()
+    
+    def getRoot(self):
+        return self.root
