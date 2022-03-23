@@ -2,7 +2,7 @@ from heapq import heapify
 import heapq
 from http.client import UnimplementedFileMode
 from math import sqrt, gamma
-from random import random
+import random
 import statistics
 import string
 from DataSet import DataSet
@@ -21,7 +21,7 @@ class CASTLE:
     #what form of k-anonymity are we using
     K:int =3
     #maximum time between a tuple is received and the tuple is outputed
-    DELTA:int = 1
+    DELTA:int = 10
     #maximum number of non k-anonymized clusters that we can store
     BETA:int = 5
 
@@ -124,24 +124,25 @@ class CASTLE:
         minCluster = min(merged,key=merged.get)
         c.enlarge(minCluster)
  
-        if (c.size()>=self.K):
+        if (len(c)>=self.K):
             return c
-        self.gamma.remove(minCluster)
+        # self.gamma.remove(minCluster)
+        clusters.remove(minCluster)
         return self.mergeClusters(c,clusters)
     
     # info loss score for adding c1 to c2
     def calc_enlargement(self, c1: Cluster, c2: Cluster):
         new_ranges = {}
         sum_info_loss = 0
-        attributes = c2.ds.getAttributes
+        attributes = self.myAttributes
         for attr_pos in range(len(attributes)): #this could change to be myAttributes instead?
             attr: Attribute = attributes[attr_pos]
-            range = []
+            new_range = []
             for tuple in c1.tuples:
                 if attr.isQI:
-                    range = attr.expandRange(c2.ranges[attr], tuple[attr_pos])
-            new_ranges[attr] = range
-            sum_info_loss += attr.calculateInfoLoss(range)
+                    new_range = attr.expandRange(c2.ranges[attr], tuple[attr_pos])
+            new_ranges[attr] = new_range
+            sum_info_loss += attr.calculateInfoLoss(new_range)
         return sum_info_loss
 
     #return the maximum generalization for each QI
@@ -180,10 +181,12 @@ class CASTLE:
 
     #where cluster is the cluster to be outputted
     def outputCluster(self, cluster:Cluster) -> List[Tuple]:
+        if cluster is None:
+            pass
         clusters:List[Cluster] = [cluster]
 
         #we split the cluster when suitable
-        if (cluster.size()>=2*self.K):
+        if (len(cluster)>=2*self.K):
             clusters = self.split(cluster)
 
         result:List[Tuple] = []
