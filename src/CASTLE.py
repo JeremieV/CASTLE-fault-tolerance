@@ -86,7 +86,7 @@ class CASTLE:
     def delay_constraint(self,staleTuple:TupleWrapper)->List[Tuple]:
         #cluster is the cluster in gamme containing tuple
         cluster:Cluster = self.getGammaCluster(staleTuple)
-        if (cluster.size()>self.K):
+        if (len(cluster)>self.K):
             return self.outputCluster(cluster)
         
         #clusters in omega containing tuple
@@ -98,8 +98,8 @@ class CASTLE:
         mergeSize:int = 0
         otherClusters:List[Cluster] = []  #clusters in gamma that is not cluster
         for c in self.gamma:
-            mergeSize += c.size()
-            if(cluster.size()<c.size()):
+            mergeSize += len(c)
+            if(len(cluster)<len(c)):
                 if (cluster != c):
                     otherClusters.append(c)
                 m+=1
@@ -116,6 +116,8 @@ class CASTLE:
 
     def mergeClusters(self, c: Cluster, clusters: List[Cluster])->Cluster:
         merged= {}
+        if len(clusters) == 0:
+            return None
         for cluster in clusters:
             merged[cluster] = self.calc_enlargement(c,cluster)
         
@@ -143,14 +145,14 @@ class CASTLE:
         return sum_info_loss
 
     #return the maximum generalization for each QI
-    def suppress(self,tuple: TupleWrapper):
+    def suppress(self,t: TupleWrapper):
         result = []
         for a in self.myAttributes:
             if (a.isQI()):
                 result.append(a.getGeneralization())
             else:
-                result.append(a.getValue(tuple))
-        return Tuple(result)
+                result.append(a.getValue(t))
+        return tuple(result)
 
 
     def getGammaCluster(self,tuple:TupleWrapper)->Cluster:
@@ -214,7 +216,7 @@ class CASTLE:
             infoLoss[cluster] = cluster.get_info_loss(t)
             changeInInfoLoss[cluster] = infoLoss[cluster]-cluster.get_info_loss()
         minValue = min(changeInInfoLoss.values())
-        minClusters:List[Cluster] = [k for k, v in changeInInfoLoss.iteritems() if v == minValue]
+        minClusters:List[Cluster] = [k for k, v in changeInInfoLoss.items() if v == minValue]
                 
         SetCok:List[Cluster]=[]
         for cluster in minClusters:

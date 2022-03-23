@@ -14,6 +14,22 @@ class DHGTreeNode(object):
     def addChild(self, child:DHGTreeNode):
         self.children.append(child)
 
+    def isLeaf(self):
+        if (len(self.children) == 0):
+            return True
+        else:
+            return False
+
+    def countNodeLeaves(self):
+
+        if (self.isLeaf()):
+            return 1
+
+        count = 0
+        child: DHGTreeNode
+        for child in self.children:
+            count = count + child.countNodeLeaves()
+        return count
     
     def traverseLeft(self) ->List:
         traversed_nodes: List[DHGTreeNode] = []

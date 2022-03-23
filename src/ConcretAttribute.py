@@ -58,9 +58,11 @@ class _ContinousAttributes(Attribute):
         return result
 
     def calculateInfoLoss(self,range)->float:
-        min = range[0]
-        max = range[1]
-        return (max-min)/(self.domain[1]-self.domain[0])
+        if len(range) > 0:
+            min = float(range[0])
+            max = float(range[1])
+            return (max-min)/(self.domain[1]-self.domain[0])
+        return 0
 
     def getDomain(self):
         return self.domain
@@ -89,11 +91,15 @@ class _CategoricalAttributes(Attribute):
 
 
     def calculateInfoLoss(self,range)->float:
-        min = range[0]
-        max = range[1]
+        if len(range) > 0:
+            min = float(range[0])
+            max = float(range[1])
 
-        total = self.DHG.countLeaves()
-        return (max-min)/(total-1)
+            total = self.myDHG.countLeaves()
+            if total == 1:
+                return 0
+            return (max-min)/(total-1)
+        return 0
 
     def createRange(self,values:List[Tuple])->Tuple:
         min = None
@@ -111,20 +117,23 @@ class _CategoricalAttributes(Attribute):
         return result
 
     def expandRange(self,range,value:Tuple)->Tuple:
-        min = range[0]
-        max = range[1]
-        
-        minRank = self.LeftTraversal.index(min)
-        maxRank = self.LeftTraversal.index(max)
-        valueRank = self.LeftTraversal.index(value)
-
         result = None
-        if (valueRank<minRank):
-            result = (value,max)
-        elif (valueRank>maxRank):
-            result = (min,value)
+        if len(range) > 0:
+            min = range[0]
+            max = range[1]
+            
+            minRank = self.LeftTraversal.index(min)
+            maxRank = self.LeftTraversal.index(max)
+            valueRank = self.LeftTraversal.index(value)
+
+            if (valueRank<minRank):
+                result = (value,max)
+            elif (valueRank>maxRank):
+                result = (min,value)
+            else:
+                result = range
         else:
-            result = range
+            result = (value, value)
         return result
 
     
