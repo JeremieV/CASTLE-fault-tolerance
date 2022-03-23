@@ -1,8 +1,9 @@
 from heapq import heapify
 import heapq
 from http.client import UnimplementedFileMode
-from math import gamma
+from math import sqrt, gamma
 from random import random
+import statistics
 import string
 from DataSet import DataSet
 
@@ -270,7 +271,11 @@ class CASTLE:
             bs.remove(B_i)
         return sc
 
-    #TODO
     # return the distance between the two tuples
     def calc_distance(self, tbar, t):
-        return NotImplementedError
+        distances: List(float) = []
+        for i in range(len(self.myAttributes)):
+            attr: Attribute = self.myAttributes[i]
+            distances.append(attr.calc_distance(tbar, t))
+        mean_distance =  sqrt(statistics.mean(distances))
+        return mean_distance
