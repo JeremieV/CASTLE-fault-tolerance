@@ -1,6 +1,7 @@
 import csv
 import asyncio
 import random
+from CASTLE import CASTLE
 
 from cluster import Cluster
 from Attribute import Attribute
@@ -24,33 +25,22 @@ beta  = 50  # beta is the threshold for controlling the maximum number of non-ks
 # attribute_headers = None
 # quasi_identifiers = None
 
-async def stream():
+async def stream(data):
     """Opens a csv file and starts outputting its elements as a stream."""
+    row = data.getNextTuple()
+    while(row!=None):
+        row = data.getNextTuple()
+        yield row
+        await asyncio.sleep(1)
+
+async def main():
     with open('datasets/credit_data.csv') as f:
         data = DataSetFactory.createCreditData(f)
-        attribute_headers = DataSet.Headers
-        row = data.getNextTuple()
-        while(row!=None):
-            row = data.getNextTuple()
-            yield row
-            await asyncio.sleep(1)
-
-        '''csv_reader = csv.reader(f)
-        first_line = True
-        for row in csv_reader:
-            if first_line:
-                attribute_headers = tuple(row)
-                quasi_identifiers = attribute_headers
-                first_line = False
-                continue
-            yield tuple(row)
-            await asyncio.sleep(1)'''
+        algorithm = CASTLE(data)
+        async for i in stream(data):
+            result = algorithm.readTuple(i)
+            for r in result:
+                print(r)
 
 if __name__ == "__main__":
-    # asyncio.run(process())
-    # asyncio.run(castle(
-    #     stream = stream(),
-    #     k = k,
-    #     delta = delta,
-    #     beta = beta
-    # ))
+     asyncio.run(main())
