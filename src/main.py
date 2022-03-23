@@ -28,6 +28,7 @@ async def stream(data):
     row = data.getNextTuple()
     while(row!=None):
         row = data.getNextTuple()
+        print("read")
         yield row
         await asyncio.sleep(1)
 
