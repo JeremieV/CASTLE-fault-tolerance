@@ -26,6 +26,12 @@ class CASTLE:
 
     recentClusters = []
 
+    #Dictionary where the key is the index
+    allTuples = {}
+
+    #the index of the next tuple to be read
+    nextTupleIndex= 0
+
     #class variables
     # set of non k_s anonymized clusters
     gamma = []
