@@ -55,12 +55,7 @@ class CASTLE:
         newTuple:TupleWrapper = self.createWrapper(tuple)
         C = self.best_selection(newTuple, self.gamma)
         if C is None:
-<<<<<<< HEAD
-            self.gamma.add(self.createCluster(newTuple))
-
-=======
             self.gamma.append(self.createCluster(newTuple))
->>>>>>> 9be1805bc6af86dbea13b41d75990c257e460857
         else:
             C.add_to_cluster(newTuple)
         return self.getOutput()
