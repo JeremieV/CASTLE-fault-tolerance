@@ -4,6 +4,7 @@ from http.client import UnimplementedFileMode
 from random import random
 import string
 from Attribute import Attribute
+from DataSet import DataSet
 
 from cluster import Cluster
 from heap_node import HeapNode
@@ -45,16 +46,23 @@ class CASTLE:
 
     myAttributes:List[Attribute] = []
 
+    def __init__(self, ds: DataSet):
+        self.ds: DataSet = ds
+
     #tuple is the new row read from the stream
     #return a list of tuples 
     def readTuple(self,tuple:Tuple) -> Tuple:
         newTuple:TupleWrapper = self.createWrapper(tuple)
         C = self.best_selection(newTuple, self.gamma)
         if C is None:
+<<<<<<< HEAD
             self.gamma.add(self.createCluster(newTuple))
 
+=======
+            self.gamma.append(self.createCluster(newTuple))
+>>>>>>> 9be1805bc6af86dbea13b41d75990c257e460857
         else:
-            C.add(newTuple)
+            C.add_to_cluster(newTuple)
         return self.getOutput()
 
     def createWrapper(self,t:Tuple) -> TupleWrapper:
@@ -136,7 +144,6 @@ class CASTLE:
             sum_info_loss += attr.calculateInfoLoss(range)
         return sum_info_loss
 
-    #TODO
     #return the maximum generalization for each QI
     def suppress(self,tuple: TupleWrapper):
         result = []
@@ -182,9 +189,10 @@ class CASTLE:
             self.gamma.remove(c)
 
 
-    #TODO
-    def createCluster(self,tuple:TupleWrapper)->Cluster:
-        return NotImplementedError
+    def createCluster(self,t:TupleWrapper)->Cluster:
+        cluster: Cluster = Cluster(self.ds)
+        cluster.add_to_cluster(t)
+        return cluster
     
     #return the cluster from set of given clusters whose enlargement results in the smallest information loss
     def best_selection(self,t:TupleWrapper,candidate_clusters:List[Cluster]) -> Cluster: 
