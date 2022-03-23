@@ -37,6 +37,9 @@ class Cluster(object):
     def remove_from_cluster(self, t):
         """ Removes a tuple from the cluster """
         self.tuples.remove(t)
+    
+    def contains(self, t):
+        return t in self.tuples
 
     def output_cluster(self):
         """ Outputs a tuple of strings representing an anonymised form of the cluster of tuples where quasi-identifiers 
