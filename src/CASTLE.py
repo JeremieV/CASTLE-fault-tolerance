@@ -157,7 +157,7 @@ class CASTLE:
 
         self.recentClusters.append(newCluster)
 
-    def outputCluster(self, cluster:Cluster):
+    def outputCluster(self, cluster:Cluster) -> List[Tuple]:
         clusters:List[Cluster] = [cluster]
         if (cluster.size()>=2*self.K):
             clusters = cluster.split()

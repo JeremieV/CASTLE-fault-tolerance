@@ -1,7 +1,7 @@
 from typing import List, Tuple
 from cluster import Cluster
 
-class TupleWrapper:
+class TupleWrapper(object):
 
     def __init__(self,myTuple:Tuple,index:int) -> None:
         self.Content = myTuple

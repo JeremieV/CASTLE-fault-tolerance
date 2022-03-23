@@ -3,7 +3,7 @@ from xmlrpc.client import boolean
 from ConcretAttribute import _CategoricalAttributes,_ContinousAttributes
 from __future__ import annotations
 from tupleWrapper import TupleWrapper
-
+from typing import Tuple,List,Dict
 from DHG import DHG
 
 #public abstract class
@@ -21,7 +21,7 @@ class Attribute(ABC):
         return self.QI
 
     #return the value of this attribute in the given tuple
-    def getValue(self,tuple:TupleWrapper):
+    def getValue(self,tuple:TupleWrapper) ->str:
         if (self.index<0):
             return NotImplementedError
         else:
@@ -43,14 +43,14 @@ class Attribute(ABC):
     #
     #This was meant to be used when outputting
     @abstractmethod
-    def getGeneralization(self,range=None):
+    def getGeneralization(self,range=None) ->str:
         return NotImplementedError
 
     
     #given a list of values,
     #return a tuple representing the range
     @abstractmethod
-    def createRange(self,values):
+    def createRange(self,values:List)->Tuple:
         return NotImplementedError
 
     @abstractmethod
@@ -64,7 +64,7 @@ class Attribute(ABC):
     #given the current range (as a tuple of length 2) and new value
     #return the expanded range (as a tuple of length 2)
     @abstractmethod
-    def expandRange(self,range,value):
+    def expandRange(self,range,value:Tuple)->Tuple:
         return NotImplementedError
 
 
