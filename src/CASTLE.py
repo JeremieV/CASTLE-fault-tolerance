@@ -54,7 +54,9 @@ class CASTLE:
     #return a list of tuples 
     def readTuple(self,tuple:Tuple) -> List[Tuple]:
         newTuple:TupleWrapper = self.createWrapper(tuple)
-        C = self.best_selection(newTuple, self.gamma)
+        C = None
+        if len(self.gamma) > 0:
+            C = self.best_selection(newTuple, self.gamma)
         if C is None:
             self.gamma.append(self.createCluster(newTuple))
         else:
@@ -209,7 +211,7 @@ class CASTLE:
         for cluster in candidate_clusters:
             infoLoss[cluster] = cluster.get_info_loss(t)
             changeInInfoLoss[cluster] = infoLoss[cluster]-cluster.get_info_loss()
-        minValue = min(changeInInfoLoss.itervalues())
+        minValue = min(changeInInfoLoss.values())
         minClusters:List[Cluster] = [k for k, v in changeInInfoLoss.iteritems() if v == minValue]
                 
         SetCok:List[Cluster]=[]

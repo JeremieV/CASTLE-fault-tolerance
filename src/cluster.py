@@ -8,6 +8,8 @@ from DataSet import DataSet
 from Attribute import Attribute
 from typing import Tuple, List
 
+from tupleWrapper import TupleWrapper
+
 class Cluster(object):
     
     """ A cluster object to store a collection of similar tuples """
@@ -22,11 +24,11 @@ class Cluster(object):
             self.ranges[attr] = []
         self.ds: DataSet = ds
     
-    def add_to_cluster(self, t):
+    def add_to_cluster(self, t: TupleWrapper):
         """ Adds the tuple to the cluster and performs range enlargement if needed """
         self.tuples.append(t)
         attribute: Attribute
-        for attribute, data in zip(self.ds.getAttributes(), t):
+        for attribute, data in zip(self.ds.getAttributes(), t.Content):
             if (attribute.isQI()):
                 self.ranges[attribute] = attribute.expandRange(self.ranges[attribute], data)
 
