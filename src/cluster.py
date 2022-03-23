@@ -44,7 +44,7 @@ class Cluster(object):
     def output_cluster(self):
         """ Outputs a tuple of strings representing an anonymised form of the cluster of tuples where quasi-identifiers 
             are replaced with ranges of values that appear in the cluster for that attribute"""
-        output: list() = list()
+        output: list(tuple) = list()
         for t in self.tuples:
             output.append(self.get_generic(t))
         return Tuple(output)
