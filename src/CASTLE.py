@@ -2,14 +2,17 @@ from heapq import heapify
 import heapq
 from http.client import UnimplementedFileMode
 from random import random
+import string
 from Attribute import Attribute
 
 from cluster import Cluster
 from heap_node import HeapNode
 from my_heap import MyHeap
 from Attribute import Attribute
-from typing import Tuple,List
+from typing import Tuple , List ,  Dict
 from tupleWrapper import TupleWrapper
+
+
 class CASTLE:
 
     #declaring contants
@@ -44,7 +47,7 @@ class CASTLE:
 
     #tuple is the new row read from the stream
     #return a list of tuples 
-    def readTuple(self,tuple:Tuple):
+    def readTuple(self,tuple:Tuple) -> Tuple:
         newTuple:TupleWrapper = self.createWrapper(tuple)
         C = self.best_selection(newTuple, self.gamma)
         if C is None:
@@ -61,7 +64,7 @@ class CASTLE:
 
 
     #TODO
-    def getOutput(self):
+    def getOutput(self) ->Tuple:
         staleTupleIndex = self.nextTupleIndex-1-self.DELTA
         staleTuple = self.allTuples[staleTupleIndex]
         if (staleTuple is None):
@@ -72,20 +75,21 @@ class CASTLE:
     #returns a string tuple
     #
     #A tuple is going to expire
-    def delay_constraint(self,staleTuple:TupleWrapper):
+    def delay_constraint(self,staleTuple:TupleWrapper)->Tuple:
         #cluster is the cluster in gamme containing tuple
-        cluster = staleTuple.getCluster()
+        cluster:Cluster = staleTuple.getCluster()
         if (cluster.size()>self.K):
             return self.outputCluster(cluster)
         
         #clusters in omega containing tuple
-        clusters = staleTuple.getKAnonCluster()
+        clusters:List[Cluster] = staleTuple.getKAnonCluster()
         if (len(clusters)>0):
-            return random.choice(clusters)
+            return random.choice(clusters).get_generic(staleTuple)
+
         
-        m=0
-        mergeSize = 0
-        otherClusters = []  #clusters in gamma that is not cluster
+        m:int =0
+        mergeSize:int = 0
+        otherClusters:List[Cluster] = []  #clusters in gamma that is not cluster
         for c in self.gamma:
             mergeSize += c.size()
             if(cluster.size()<c.size()):
@@ -103,8 +107,8 @@ class CASTLE:
         return self.outputCluster(mergedCluster)
 
 
-    def mergeClusters(self,c,clusters):
-        merged= {}
+    def mergeClusters(self,c:Cluster,clusters:List[Cluster])->Cluster:
+        merged : Dict[Cluster,int] = {}
         for cluster in clusters:
             merged[cluster] = self.getEnlargedInfoLoss(c,cluster)
         
@@ -138,8 +142,8 @@ class CASTLE:
 
         self.recentClusters.append(newCluster)
 
-    def outputCluster(self, cluster):
-        clusters = [cluster]
+    def outputCluster(self, cluster:Cluster):
+        clusters:List[Cluster] = [cluster]
         if (cluster.size()>=2*self.K):
             clusters = cluster.split()
 
