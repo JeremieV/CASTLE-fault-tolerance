@@ -2,6 +2,7 @@
 #and shouldn't really be called outside of AttributeFactory
 
 from Attribute import Attribute
+from DHG import DHG
 
 #private class
 #concret implementation of Attribute, represents continous attributes
@@ -14,7 +15,6 @@ class _ContinousAttributes(Attribute):
     def __init__(self,name,index):
         self.name = name
         self.index = index
-
        
     def createRange(self,values):
         min = min(values)
@@ -39,8 +39,13 @@ class _ContinousAttributes(Attribute):
         max = range[1]
         return (max-min)/(self.domain[1]-self.domain[0])
 
+    def getDomain(self):
+        return self.domain
 
-    def getGeneralization(self, range):
+
+    def getGeneralization(self, range=None):
+        if (range is None):
+            return str(self.getDomain()[0])+"<=x<="+str(self.getDomain()[1])
         min = range[0]
         max = range[1]
         result = str(min)+"<=x<="+str(max)
@@ -97,5 +102,11 @@ class _CategoricalAttributes(Attribute):
             result = range
         return result
 
-    def getGeneralization(self, range):
-        return self.DHG.getLowestCommonAncestor(range[0],range[1])
+    
+
+    def getGeneralization(self, range=None):
+        if (range is not None):
+            return self.DHG.getLowestCommonAncestor(range[0],range[1])
+        else:
+            #TODO
+            return self.DHG.getRoot()

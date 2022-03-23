@@ -6,6 +6,7 @@ from random import random
 from cluster import Cluster
 from heap_node import HeapNode
 from my_heap import MyHeap
+from Attribute import Attribute
 
 class CASTLE:
 
@@ -26,7 +27,10 @@ class CASTLE:
     # set of k_s anonymized clusters
     omega = [] 
 
+    myAttributes = []
+
     #tuple is the new row read from the stream
+    #return a list of tuples 
     def readTuple(self,tuple,time):
 
         C = self.best_selection(tuple, self.gamma)
@@ -107,7 +111,10 @@ class CASTLE:
     #TODO
     #return the maximum generalization for each QI
     def suppress(self,tuple):
-        return NotImplementedError
+        result = []
+        for a in self.myAttributes:
+            result.append(a.getGeneralization())
+        return tuple(result)
 
     def recalculateTau(self,cluster):
         return NotImplementedError

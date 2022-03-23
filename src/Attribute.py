@@ -3,6 +3,8 @@ from xmlrpc.client import boolean
 from ConcretAttribute import _CategoricalAttributes,_ContinousAttributes
 from __future__ import annotations
 
+from DHG import DHG
+
 #public abstract class
 #Represents a column in the DataSet
 #can perform certain calculations
@@ -14,7 +16,7 @@ class Attribute(ABC):
     PID = False
 
     #returns true if this attribute is a quasi-identifier
-    def isQI(self) -> boolean:
+    def isQI(self) -> bool:
         return self.QI
 
     #return the value of this attribute in the given tuple
@@ -29,15 +31,18 @@ class Attribute(ABC):
         return self.name
 
     
-    def isPID(self):
+    def isPID(self)-> bool:
         return self.PID
+
+    def getDHG(self) -> DHG:
+        return self.DHG
 
     #returns the generalized value  (as a string)
     #of this attribute according to the given range
     #
     #This was meant to be used when outputting
     @abstractmethod
-    def getGeneralization(self,range):
+    def getGeneralization(self,range=None):
         return NotImplementedError
 
     
