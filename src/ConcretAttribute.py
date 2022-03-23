@@ -1,6 +1,7 @@
 #This file contains concret implementations of the abstract Attribute object
 #and shouldn't really be called outside of AttributeFactory
 
+import sys
 from Attribute import Attribute
 from DHG import DHG
 
@@ -10,7 +11,7 @@ class _ContinousAttributes(Attribute):
 
     #defines the domain of this attribute
     #all values of the attribute must fall within the domain
-    domain = [0,0]
+    domain = [0,sys.maxint]
 
     def __init__(self,name,index):
         self.name = name
@@ -53,7 +54,7 @@ class _ContinousAttributes(Attribute):
 #private class
 #concret implementation of Attribute, represents catagorical attributes
 class _CategoricalAttributes(Attribute):
-    DHG = None
+    DHG: DHG = None
     LeftTraversal = None
 
     def __init__(self,name,index,DHG):
@@ -64,10 +65,10 @@ class _CategoricalAttributes(Attribute):
 
 
     def calculateInfoLoss(self,range):
-        min = range[0].getIndex()
-        max = range[1].getIndex()
+        min = range[0]
+        max = range[1]
 
-        total = len(self.DHG.getLeaves())
+        total = self.DHG.countLeaves()
         return (max-min)/(total-1)
 
     def createRange(self,values):

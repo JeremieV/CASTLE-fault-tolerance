@@ -2,6 +2,7 @@ from heapq import heapify
 import heapq
 from http.client import UnimplementedFileMode
 from random import random
+from Attribute import Attribute
 
 from cluster import Cluster
 from heap_node import HeapNode
@@ -150,15 +151,24 @@ class CASTLE:
             self.gamma.remove(c)
 
     
-    #TODO
     #return the information loss of a cluster
     #if a tuple is supplied, then return the info loss of the enlarged cluster
-    def getInfoLoss(cluster,tuple=None):
+    def getInfoLoss(cluster: Cluster,tuple=None):
         if (tuple==None):
-            return cluster.getInfoLoss()
+            return cluster.get_info_loss()
         else:
             #enlarge
-            pass
+            sum_info_loss = 0
+            n = 0
+            for clus_tuple in cluster.tuples:
+                attribute: Attribute
+                for attribute, data in zip(cluster.ds.getAttributes(), tuple):
+                    # if not a QI, the range will be 0 so the info loss will be 0
+                    if attribute.isQI:
+                        new_range = attribute.expandRange(cluster.ranges[attribute], data)
+                        sum_info_loss += attribute.calculateInfoLoss(new_range)
+                        n += 1
+            return sum_info_loss/n
 
 
     #TODO
