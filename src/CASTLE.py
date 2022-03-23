@@ -18,7 +18,12 @@ class CASTLE:
     #maximum number of non k-anonymized clusters that we can store
     BETA = 5
 
+    mu = 5
+
+    #average infoLoss of the mu more recent k anonymized clusters
     tau = 0
+
+    recentClusters = []
 
     #class variables
     # set of non k_s anonymized clusters
@@ -116,8 +121,16 @@ class CASTLE:
             result.append(a.getGeneralization())
         return tuple(result)
 
-    def recalculateTau(self,cluster):
-        return NotImplementedError
+    def recalculateTau(self,newCluster: Cluster):
+        #get the mu most recent cluster
+        num = len(self.recentClusters)
+        if (num<self.mu):
+            self.tau = ((self.tau*num)+newCluster.getInfoLoss()) / (num+1)
+        else:
+            popped = self.recentClusters.pop(0)
+            self.tau = ((self.tau*self.mu)-popped.getInfoLoss()+newCluster.getInfoLoss()) / self.mu
+
+        self.recentClusters.append(newCluster)
 
     def outputCluster(self, cluster):
         clusters = [cluster]
