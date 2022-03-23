@@ -22,11 +22,11 @@ class Attribute(ABC):
         return self.QI
 
     #return the value of this attribute in the given tuple
-    def getValue(self,tuple:TupleWrapper) ->str:
+    def getValue(self,tuple:TupleWrapper):
         if (self.index<0):
             return NotImplementedError
         else:
-            return tuple[self.index]
+            return tuple.Content[self.index]
 
     #returns the name of the column, used for printing
     def getName(self) -> str:
@@ -47,6 +47,9 @@ class Attribute(ABC):
     def getGeneralization(self,range=None) ->str:
         return NotImplementedError
 
+    @abstractmethod
+    def calc_distance(self, tbar: TupleWrapper, t: TupleWrapper) -> float:
+        return NotImplementedError
     
     #given a list of values,
     #return a tuple representing the range

@@ -5,6 +5,7 @@ import sys
 from typing import Tuple,List
 from Attribute import Attribute
 from DHG import DHG
+from tupleWrapper import TupleWrapper
 
 #private class
 #concret implementation of Attribute, represents continous attributes
@@ -51,6 +52,9 @@ class _ContinousAttributes(Attribute):
         min = range[0]
         max = range[1]
         result = str(min)+"<=x<="+str(max)
+    
+    def calc_distance(self, tbar: TupleWrapper, t: TupleWrapper) -> float:
+        pow(self.getValue(tbar)-self.getValue(t), 2)
 
 #private class
 #concret implementation of Attribute, represents catagorical attributes
@@ -110,3 +114,8 @@ class _CategoricalAttributes(Attribute):
             return self.getDHG().getLCA(range[0],range[1])
         else:
             return self.getDHG().getRoot()
+    
+    def calc_distance(self, tbar: TupleWrapper, t: TupleWrapper) -> float:
+        val_1 = self.getValue(tbar)
+        val_2 = self.getValue(t)
+        return pow(self.LeftTraversal.index(val_1)-self.LeftTraversal.index(val_1), 2)
