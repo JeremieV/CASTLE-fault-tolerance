@@ -1,6 +1,7 @@
 from heapq import heapify
 import heapq
 from http.client import UnimplementedFileMode
+from math import gamma
 from random import random
 import string
 from Attribute import Attribute
@@ -82,12 +83,12 @@ class CASTLE:
     #A tuple is going to expire
     def delay_constraint(self,staleTuple:TupleWrapper)->List[Tuple]:
         #cluster is the cluster in gamme containing tuple
-        cluster:Cluster = staleTuple.getCluster()
+        cluster:Cluster = self.getGammaCluster(staleTuple)
         if (cluster.size()>self.K):
             return self.outputCluster(cluster)
         
         #clusters in omega containing tuple
-        clusters:List[Cluster] = staleTuple.getKAnonCluster()
+        clusters:List[Cluster] = self.getOmegaCluster(staleTuple)
         if (len(clusters)>0):
             return [random.choice(clusters).get_generic(staleTuple)]
 
@@ -121,7 +122,7 @@ class CASTLE:
  
         if (c.size()>=self.K):
             return c
-        clusters.remove(minCluster)
+        self.gamma.remove(minCluster)
         return self.mergeClusters(c,clusters)
     
     # info loss score for adding c1 to c2
@@ -150,10 +151,17 @@ class CASTLE:
         return Tuple(result)
 
 
-    def getGammaCluster(self,tuple:TupleWrapper):
-        return NotImplementedError
+    def getGammaCluster(self,tuple:TupleWrapper)->Cluster:
+        for c in self.gamma:
+            if (c.contains(tuple)):
+                return c
+
     def getOmegaCluster(self,tuple:TupleWrapper):
-        return NotImplementedError
+        result:List[Cluster] = []
+        for c in self.omega:
+            if (c.contains(tuple)):
+                result.append(c)
+        return result
 
     def recalculateTau(self,newCluster: Cluster):
         #get the mu most recent cluster
