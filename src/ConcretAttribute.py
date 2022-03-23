@@ -46,7 +46,7 @@ class _ContinousAttributes(Attribute):
 
     def getGeneralization(self, range=None):
         if (range is None):
-            return str(self.getDomain()[0])+"<=x<="+str(self.getDomain()[1])
+            return str(self.domain[0])+"<=x<="+str(self.domain[1])
         min = range[0]
         max = range[1]
         result = str(min)+"<=x<="+str(max)
@@ -110,4 +110,4 @@ class _CategoricalAttributes(Attribute):
             return self.DHG.getLCA(range[0],range[1])
         else:
             #TODO
-            return self.DHG.getRoot()
+            return self.DHG.root

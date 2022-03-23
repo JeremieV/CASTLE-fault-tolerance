@@ -6,6 +6,7 @@ import random
 from xml.dom.minidom import Attr
 from DataSet import DataSet
 from Attribute import Attribute
+from typing import Tuple, List
 
 class Cluster(object):
     
@@ -38,13 +39,12 @@ class Cluster(object):
         self.tuples.remove(t)
 
     def output_cluster(self):
-        """ Outputs a string representing an anonymised form of the cluster of tuples where quasi-identifiers 
+        """ Outputs a tuple of strings representing an anonymised form of the cluster of tuples where quasi-identifiers 
             are replaced with ranges of values that appear in the cluster for that attribute"""
-        output_string = ""
-        for tuple in self.tuples:
-            output_string = output_string + self.get_generic(tuple) + "\n"
-
-        return output_string
+        output: list() = list()
+        for t in self.tuples:
+            output.append(self.get_generic(t))
+        return Tuple(output)
     
     def get_buckets(self) -> list(list(tuple)):
         """group tuples into 'buckets' that share the same pid value"""
