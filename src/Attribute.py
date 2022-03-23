@@ -11,10 +11,11 @@ from DHG import DHG
 #can perform certain calculations
 #for example, calculating the range of a list of values
 class Attribute(ABC):
-    QI = False
-    index = -1
-    name = ""
-    PID = False
+    QI:bool= False
+    index:int = -1
+    name:str = ""
+    PID:bool = False
+    myDHG:DHG = None
 
     #returns true if this attribute is a quasi-identifier
     def isQI(self) -> bool:
@@ -36,7 +37,7 @@ class Attribute(ABC):
         return self.PID
 
     def getDHG(self) -> DHG:
-        return self.DHG
+        return self.myDHG
 
     #returns the generalized value  (as a string)
     #of this attribute according to the given range

@@ -2,7 +2,7 @@
 #and shouldn't really be called outside of AttributeFactory
 
 import sys
-from typing import Tuple
+from typing import Tuple,List
 from Attribute import Attribute
 from DHG import DHG
 
@@ -55,14 +55,13 @@ class _ContinousAttributes(Attribute):
 #private class
 #concret implementation of Attribute, represents catagorical attributes
 class _CategoricalAttributes(Attribute):
-    DHG:DHG = None
     LeftTraversal = None
 
-    def __init__(self,name:str,index:int,DHG:DHG):
+    def __init__(self,name:str,index:int,dhg:DHG):
         self.name = name
         self.index = index
-        self.DHG = DHG
-        self.LeftTraversal = self.DHG.getLeftTraversal()
+        self.myDHG = dhg
+        self.LeftTraversal = self.myDHG.getLeftTraversal()
 
 
     def calculateInfoLoss(self,range)->float:
