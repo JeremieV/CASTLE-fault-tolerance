@@ -2,7 +2,7 @@ from ast import Import
 from contextlib import nullcontext
 import csv
 from Attribute import Attribute
-from typing
+from typing import List
 from ConcretAttribute import AttributeFactory
 
 #public class

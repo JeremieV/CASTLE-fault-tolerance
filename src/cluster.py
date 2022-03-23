@@ -31,7 +31,7 @@ class Cluster(object):
                 self.ranges[attribute] = attribute.expandRange(self.ranges[attribute], data)
 
     # todo
-    def enlarge(self, tuples: list(tuple)):
+    def enlarge(self, tuples: List[tuple]):
         pass
 
     def remove_from_cluster(self, t):
@@ -49,7 +49,7 @@ class Cluster(object):
             output.append(self.get_generic(t))
         return Tuple(output)
     
-    def get_buckets(self) -> list(list(tuple)):
+    def get_buckets(self) -> List[List[Tuple]]:
         """group tuples into 'buckets' that share the same pid value"""
         buck_dict: dict(list()) = {}
         buckets: list(list(tuple)) = list(list())

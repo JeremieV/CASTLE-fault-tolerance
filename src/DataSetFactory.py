@@ -17,8 +17,10 @@ class ColumnDefinition:
             self.DGHMap[columnName] = DGH
 
     def isQI(self,columnName):
-        return self.QIMap[columnName]
-    
+        if (columnName in self.QIMap.keys()):
+            return self.QIMap[columnName]
+        return False
+
     def isPID(self,columnName):
         return columnName==self.PIDName
 

@@ -110,7 +110,7 @@ class CASTLE:
         return self.outputCluster(mergedCluster)
 
 
-    def mergeClusters(self, c: Cluster, clusters: list(Cluster))->Cluster:
+    def mergeClusters(self, c: Cluster, clusters: List[Cluster])->Cluster:
         merged= {}
         for cluster in clusters:
             merged[cluster] = self.calc_enlargement(c,cluster)
