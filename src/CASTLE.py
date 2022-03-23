@@ -32,7 +32,7 @@ class CASTLE:
     recentClusters:List[Cluster] = []
 
     #Dictionary where the key is the index
-    allTuples = {}
+    allTuples: Dict[int,TupleWrapper] = {}
 
     #the index of the next tuple to be read
     nextTupleIndex:int = 0
@@ -172,11 +172,12 @@ class CASTLE:
 
         #we split the cluster when suitable
         if (cluster.size()>=2*self.K):
-            clusters = cluster.split()
+            clusters = self.split(cluster)
 
         result:List[Tuple] = []
         for c in clusters:
             result.extend(c.output_cluster())
+            t: TupleWrapper
             for t in c.tuples:
                 self.allTuples[t.getIndex()] = None
 
