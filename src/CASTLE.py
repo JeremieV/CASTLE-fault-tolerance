@@ -52,6 +52,7 @@ class CASTLE:
         C = self.best_selection(newTuple, self.gamma)
         if C is None:
             self.gamma.add(self.createCluster(newTuple))
+
         else:
             C.add(newTuple)
         return self.getOutput()
@@ -146,6 +147,11 @@ class CASTLE:
                 result.append(a.getValue(tuple))
         return Tuple(result)
 
+    def getGammaCluster(self,tuple:TupleWrapper):
+        return NotImplementedError
+    def getOmegaCluster(self,tuple:TupleWrapper):
+        return NotImplementedError
+
     def recalculateTau(self,newCluster: Cluster):
         #get the mu most recent cluster
         num = len(self.recentClusters)
@@ -159,13 +165,13 @@ class CASTLE:
 
     def outputCluster(self, cluster:Cluster) -> List[Tuple]:
         clusters:List[Cluster] = [cluster]
+
         if (cluster.size()>=2*self.K):
             clusters = cluster.split()
 
-        result = ""
-        c: Cluster
+        result:List[Tuple] = []
         for c in clusters:
-            result += c.output_cluster()
+            result.extend(c.output_cluster())
             self.recalculateTau(c)
 
             if (c.get_info_loss()<self.tau):
