@@ -51,16 +51,11 @@ class CASTLE:
 
     #tuple is the new row read from the stream
     #return a list of tuples 
-    def readTuple(self,tuple:Tuple) -> Tuple:
+    def readTuple(self,tuple:Tuple) -> List[Tuple]:
         newTuple:TupleWrapper = self.createWrapper(tuple)
         C = self.best_selection(newTuple, self.gamma)
         if C is None:
-<<<<<<< HEAD
-            self.gamma.add(self.createCluster(newTuple))
-
-=======
             self.gamma.append(self.createCluster(newTuple))
->>>>>>> 9be1805bc6af86dbea13b41d75990c257e460857
         else:
             C.add_to_cluster(newTuple)
         return self.getOutput()
@@ -73,18 +68,18 @@ class CASTLE:
 
 
     #TODO
-    def getOutput(self) ->Tuple:
+    def getOutput(self) ->List[Tuple]:
         staleTupleIndex = self.nextTupleIndex-1-self.DELTA
         staleTuple = self.allTuples[staleTupleIndex]
         if (staleTuple is None):
-            return ()
+            return []
         else:
             self.delay_constraint(staleTuple)
 
     #returns a string tuple
     #
     #A tuple is going to expire
-    def delay_constraint(self,staleTuple:TupleWrapper)->Tuple:
+    def delay_constraint(self,staleTuple:TupleWrapper)->List[Tuple]:
         #cluster is the cluster in gamme containing tuple
         cluster:Cluster = staleTuple.getCluster()
         if (cluster.size()>self.K):
@@ -93,9 +88,8 @@ class CASTLE:
         #clusters in omega containing tuple
         clusters:List[Cluster] = staleTuple.getKAnonCluster()
         if (len(clusters)>0):
-            return random.choice(clusters).get_generic(staleTuple)
+            return [random.choice(clusters).get_generic(staleTuple)]
 
-        
         m:int =0
         mergeSize:int = 0
         otherClusters:List[Cluster] = []  #clusters in gamma that is not cluster
@@ -107,16 +101,16 @@ class CASTLE:
                 m+=1
 
         if (m>len(self.gamma)/2):
-            return self.suppress(staleTuple)
+            return [self.suppress(staleTuple)]
         
         if (mergeSize<self.K):
-            return self.suppress(staleTuple)
+            return [self.suppress(staleTuple)]
 
         mergedCluster = self.mergeClusters(cluster,otherClusters)
         return self.outputCluster(mergedCluster)
 
 
-    def mergeClusters(self, c: Cluster, clusters: list(Cluster)):
+    def mergeClusters(self, c: Cluster, clusters: list(Cluster))->Cluster:
         merged= {}
         for cluster in clusters:
             merged[cluster] = self.calc_enlargement(c,cluster)
@@ -153,6 +147,7 @@ class CASTLE:
             else:
                 result.append(a.getValue(tuple))
         return Tuple(result)
+
 
     def getGammaCluster(self,tuple:TupleWrapper):
         return NotImplementedError
