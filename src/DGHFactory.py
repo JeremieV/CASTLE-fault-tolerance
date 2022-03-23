@@ -8,9 +8,10 @@ class DGHFactory:
 
     # Creates a discrete DHG and generalises both 0 and 1 to 'maybe'
     def _createTreeDefault(self):
-        self.credit_tree_default = DHG(True)
-        self._addDefault(0)
-        self._addDefault(1)
+        self.credit_tree_default = DHG()
+        self._addDefault("Maybe", "Any")
+        self._addDefault("1", "Maybe")
+        self._addDefault("0", "Maybe")
 
     def _createTreeIncome(self):
         self.credit_tree_income = DHG(False)
@@ -47,9 +48,8 @@ class DGHFactory:
         self.credit_tree_loan.buildContinuousLeaf(min, max)
 
     # Generalise both possible results into maybe
-    def _addDefault(self, default):
-        self.credit_tree_default.addValue(default)
-        self.credit_tree_default.addDiscreteGeneralisation("Maybe", default)
+    def _addDefault(self, value, parent):
+        self.credit_tree_default.addValue(value, parent)
 
     # Returns a DHG for the default values of the credit_data.csv file
     def createCreditDefault(self):

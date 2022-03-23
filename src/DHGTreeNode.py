@@ -1,30 +1,30 @@
 class DHGTreeNode:
 
-    def __init__(self, params, parent, discrete):
+    def __init__(self, value, parent):
         
-        self.parent = params[0]
-        self.discrete = discrete
-        self.values = []
-
-        if (discrete):
-            self.name = params[0]
-            self.addValue(params[1])
-        else:
-            self.name = params[0] + " - " + params[1]
-            self.range = [params[0], params[1]]
-
+        self.parent = parent
+        self.value = value
+        self.children = []
         self.pointers = []
 
-    def addValue(self, value):
-        self.values.append(value)
+    def isLeaf(self):
+        if (len(self.pointers) == 0):
+            return True
+        else:
+            return False
 
-    def addLeaf(self, params):
-            self.pointers.append(DHGTreeNode(params, self, self.discrete))
-            
-    def getRange(self):
-        return (self.range[1] - self.range[0])
+    def addChild(self, value):
+        self.children.append(value)
 
+    def addLeaf(self, value):
+        self.pointers.append(DHGTreeNode(value, self))
 
+    def countNodeLeaves(self):
 
+        if (self.isLeaf()):
+            return 1
 
-    
+        count = 0
+        for child in self.pointers:
+            count = count + child.countNodeLeaves()
+        return count
