@@ -12,13 +12,3 @@ class TupleWrapper(object):
 
     def getTuple(self) -> Tuple:
         return self.Content
-
-    #return a list of k anomlyized clusters which contain the tuple
-    def getKAnonCluster(self)->List[Cluster]:
-        #TODO
-        return []
-
-    #return the non K-anomlyized clusters which contain the tuple
-    def getCluster(self)->Cluster:
-        #TODO
-        return None
