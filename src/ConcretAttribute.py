@@ -107,7 +107,7 @@ class _CategoricalAttributes(Attribute):
 
     def getGeneralization(self, range=None):
         if (range is not None):
-            return self.DHG.getLowestCommonAncestor(range[0],range[1])
+            return self.DHG.getLCA(range[0],range[1])
         else:
             #TODO
             return self.DHG.getRoot()

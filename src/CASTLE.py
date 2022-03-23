@@ -150,10 +150,10 @@ class CASTLE:
         #get the mu most recent cluster
         num = len(self.recentClusters)
         if (num<self.mu):
-            self.tau = ((self.tau*num)+newCluster.getInfoLoss()) / (num+1)
+            self.tau = ((self.tau*num)+newCluster.get_info_loss()) / (num+1)
         else:
             popped = self.recentClusters.pop(0)
-            self.tau = ((self.tau*self.mu)-popped.getInfoLoss()+newCluster.getInfoLoss()) / self.mu
+            self.tau = ((self.tau*self.mu)-popped.get_info_loss()+newCluster.get_info_loss()) / self.mu
 
         self.recentClusters.append(newCluster)
 
@@ -165,7 +165,7 @@ class CASTLE:
         result = ""
         c: Cluster
         for c in clusters:
-            result += c.output()
+            result += c.output_cluster()
             self.recalculateTau(c)
 
             if (c.get_info_loss()<self.tau):
@@ -181,7 +181,7 @@ class CASTLE:
         return NotImplementedError
     
     #return the cluster from set of given clusters whose enlargement results in the smallest information loss
-    def best_selection(self,t:TupleWrapper,candidate_clusters:List[Cluster]): 
+    def best_selection(self,t:TupleWrapper,candidate_clusters:list(Cluster)): 
         clusters = {}
         infoLoss = {}
         cluster: Cluster
