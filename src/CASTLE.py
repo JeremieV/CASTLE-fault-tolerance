@@ -106,7 +106,7 @@ class CASTLE:
     def mergeClusters(self,c,clusters):
         merged= {}
         for cluster in clusters:
-            merged[cluster] = calcEnlargement(c,cluster)
+            merged[cluster] = self.getEnlargedInfoLoss(c,cluster)
         
         minCluster = min(merged,key=merged.get)
         c.enlarge(minCluster)
@@ -148,7 +148,7 @@ class CASTLE:
             result += c.output()
             self.recalculateTau(c)
 
-            if (self.getInfoLoss(c)<self.tau):
+            if (self.getEnlargedInfoLoss(c)<self.tau):
                 self.omega.append(c)
             else:
                 #delete C???
@@ -158,21 +158,18 @@ class CASTLE:
     
     #return the information loss of a cluster
     #if a tuple is supplied, then return the info loss of the enlarged cluster
-    def getInfoLoss(cluster: Cluster,tuple:TupleWrapper=None):
+    def getEnlargedInfoLoss(self,cluster: Cluster,tuple:TupleWrapper=None) -> float:
         if (tuple==None):
             return cluster.get_info_loss()
         else:
-            #enlarge
-            sum_info_loss = 0
-            n = 0
-            for clus_tuple in cluster.tuples:
-                attribute: Attribute
-                for attribute, data in zip(cluster.ds.getAttributes(), tuple):
-                    # if not a QI, the range will be 0 so the info loss will be 0
-                    if attribute.isQI:
-                        new_range = attribute.expandRange(cluster.ranges[attribute], data)
-                        sum_info_loss += attribute.calculateInfoLoss(new_range)
-                        n += 1
+            sum_info_loss:float = 0
+            n:int = 0
+
+            for attribute in self.myAttributes:
+                if (attribute.isQI()):
+                    newRange = attribute.expandRange(cluster.ranges[attribute],attribute.getValue(tuple))
+                    sum_info_loss += attribute.calculateInfoLoss(newRange)
+                    n += 1
             return sum_info_loss/n
 
 
@@ -185,7 +182,7 @@ class CASTLE:
         clusters = {}
         infoLoss = {}
         for cluster in candidate_clusters:
-            infoLoss[cluster] = CASTLE.getInfoLoss(cluster, t)
+            infoLoss[cluster] = self.getInfoLoss(cluster, t)
             val = infoLoss[cluster]-cluster.getInfoLoss()
             clusters[cluster] = val
         minValue = min(clusters.itervalues())

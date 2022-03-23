@@ -10,6 +10,9 @@ class TupleWrapper:
     def getIndex(self) -> int:
         return self.index
 
+    def getTuple(self) -> Tuple:
+        return self.Content
+
     #return a list of k anomlyized clusters which contain the tuple
     def getKAnonCluster(self)->List[Cluster]:
         #TODO

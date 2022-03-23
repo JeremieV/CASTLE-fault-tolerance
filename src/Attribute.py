@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from xmlrpc.client import boolean
 from ConcretAttribute import _CategoricalAttributes,_ContinousAttributes
 from __future__ import annotations
+from tupleWrapper import TupleWrapper
 
 from DHG import DHG
 
@@ -20,7 +21,7 @@ class Attribute(ABC):
         return self.QI
 
     #return the value of this attribute in the given tuple
-    def getValue(self,tuple):
+    def getValue(self,tuple:TupleWrapper):
         if (self.index<0):
             return NotImplementedError
         else:
