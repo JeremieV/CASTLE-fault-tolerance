@@ -82,29 +82,24 @@ class Cluster(object):
     
     #return the information loss of a cluster
     #if a tuple is supplied, then return the info loss of the enlarged cluster
-    def get_info_loss(self, tuple):
+    def get_info_loss(self, tuple:TupleWrapper=None):
         sum_info_loss = 0
         n = 0
         for clus_tuple in self.tuples:
             attribute: Attribute
-            for attribute, data in zip(self.ds.getAttributes(), tuple):
-                # if not a QI, the range will be 0 so the info loss will be 0
-                if attribute.isQI:
-                    new_range = attribute.expandRange(self.ranges[attribute], data)
-                    sum_info_loss += attribute.calculateInfoLoss(new_range)
-                    n += 1
-        return sum_info_loss/n
-
-    def get_info_loss(self):
-        sum_info_loss = 0
-        n = 0
-        for clus_tuple in self.tuples:
-            attribute: Attribute
-            for attribute in self.ds.getAttributes():
-                # if not a QI, the range will be 0 so the info loss will be 0
-                if attribute.isQI:
-                    sum_info_loss += attribute.calculateInfoLoss(self.ranges[attribute])
-                    n += 1
+            if tuple is None:
+                for attribute in self.ds.getAttributes():
+                    # if not a QI, the range will be 0 so the info loss will be 0
+                    if attribute.isQI:
+                        sum_info_loss += attribute.calculateInfoLoss(self.ranges[attribute])
+                        n += 1
+            else:
+                for attribute, data in zip(self.ds.getAttributes(), tuple.Content):
+                    # if not a QI, the range will be 0 so the info loss will be 0
+                    if attribute.isQI:
+                        new_range = attribute.expandRange(self.ranges[attribute], data)
+                        sum_info_loss += attribute.calculateInfoLoss(new_range)
+                        n += 1
         return sum_info_loss/n
     
     def __len__(self):

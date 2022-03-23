@@ -71,8 +71,10 @@ class CASTLE:
 
     def getOutput(self) ->List[Tuple]:
         staleTupleIndex = self.nextTupleIndex-1-self.DELTA
-        staleTuple = self.allTuples[staleTupleIndex]
-        self.allTuples[staleTupleIndex] = None
+        staleTuple = None
+        if staleTupleIndex >= 0:
+            staleTuple = self.allTuples[staleTupleIndex]
+            self.allTuples[staleTupleIndex] = None
         if (staleTuple is None):
             return []
         else:
