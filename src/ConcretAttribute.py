@@ -43,15 +43,18 @@ class _ContinousAttributes(Attribute):
         return result
 
     def expandRange(self,range,value:Tuple)->Tuple:
-        min = range[0]
-        max = range[1]
         result = None
-        if (value<min):
-            result = (value,range[1])
-        elif (value>max):
-            result = (range[0],value)
+        if len(range) > 0:
+            min = range[0]
+            max = range[1]
+            if (value<min):
+                result = (value,range[1])
+            elif (value>max):
+                result = (range[0],value)
+            else:
+                result = range
         else:
-            result = range
+            result = (value, value)
         return result
 
     def calculateInfoLoss(self,range)->float:
