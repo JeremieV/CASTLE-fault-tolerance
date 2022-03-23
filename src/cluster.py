@@ -64,12 +64,24 @@ class Cluster(object):
         attr: Attribute
         for attr in self.ds.getAttributes():
             if attr.isQI:
-                output_string = output_string + attr.getName() + attr.getGeneralization(self.attrRange) + " "
+                output_string = output_string + attr.getName() + attr.getGeneralization(self.ranges[attr]) + " "
             else:
                 non_quasi_value = attr.getValue(tuple)
                 non_quasi_range = [non_quasi_value, non_quasi_value]
                 output_string = output_string + attr.getName() + attr.getGeneralization(non_quasi_range) + " "
         return output_string
+    
+    def get_info_loss(self):
+        sum_info_loss = 0
+        n = 0
+        for clus_tuple in self.tuples:
+            attribute: Attribute
+            for attribute in self.ds.getAttributes():
+                # if not a QI, the range will be 0 so the info loss will be 0
+                if attribute.isQI:
+                    sum_info_loss += attribute.calculateInfoLoss(self.ranges[attribute])
+                    n += 1
+        return sum_info_loss/n
     
     def __len__(self):
         """Returns the quantity of tuples in the cluster"""
