@@ -1,6 +1,7 @@
 import csv
 import asyncio
 import random
+from CASTLE import CASTLE
 
 from cluster import Cluster
 from Attribute import Attribute
@@ -35,22 +36,12 @@ async def stream():
             yield row
             await asyncio.sleep(1)
 
-        '''csv_reader = csv.reader(f)
-        first_line = True
-        for row in csv_reader:
-            if first_line:
-                attribute_headers = tuple(row)
-                quasi_identifiers = attribute_headers
-                first_line = False
-                continue
-            yield tuple(row)
-            await asyncio.sleep(1)'''
+async def main():
+    algorithm = CASTLE()
+    async for i in stream():
+        result = algorithm.readTuple(i)
+        for r in result:
+            print(r)
 
 if __name__ == "__main__":
-    # asyncio.run(process())
-    # asyncio.run(castle(
-    #     stream = stream(),
-    #     k = k,
-    #     delta = delta,
-    #     beta = beta
-    # ))
+     asyncio.run(main())

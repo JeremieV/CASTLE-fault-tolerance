@@ -67,8 +67,6 @@ class CASTLE:
         self.nextTupleIndex= self.nextTupleIndex+1
         return result
 
-
-    #TODO
     def getOutput(self) ->List[Tuple]:
         staleTupleIndex = self.nextTupleIndex-1-self.DELTA
         staleTuple = self.allTuples[staleTupleIndex]
