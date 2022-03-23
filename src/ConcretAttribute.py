@@ -2,6 +2,7 @@
 #and shouldn't really be called outside of AttributeFactory
 
 import sys
+from typing import Tuple,List
 from Attribute import Attribute
 from DHG import DHG
 
@@ -17,13 +18,13 @@ class _ContinousAttributes(Attribute):
         self.name = name
         self.index = index
        
-    def createRange(self,values):
+    def createRange(self,values)->Tuple:
         min = min(values)
         max = max(values)
         result = (min,max)
         return result
 
-    def expandRange(self,range,value):
+    def expandRange(self,range,value:Tuple)->Tuple:
         min = range[0]
         max = range[1]
         result = None
@@ -35,7 +36,7 @@ class _ContinousAttributes(Attribute):
             result = range
         return result
 
-    def calculateInfoLoss(self,range):
+    def calculateInfoLoss(self,range)->float:
         min = range[0]
         max = range[1]
         return (max-min)/(self.domain[1]-self.domain[0])
@@ -54,24 +55,23 @@ class _ContinousAttributes(Attribute):
 #private class
 #concret implementation of Attribute, represents catagorical attributes
 class _CategoricalAttributes(Attribute):
-    DHG: DHG = None
     LeftTraversal = None
 
-    def __init__(self,name,index,DHG):
+    def __init__(self,name:str,index:int,dhg:DHG):
         self.name = name
         self.index = index
-        self.DHG = DHG
-        self.LeftTraversal = self.DHG.getLeftTraversal()
+        self.myDHG = dhg
+        self.LeftTraversal = self.myDHG.getLeftTraversal()
 
 
-    def calculateInfoLoss(self,range):
+    def calculateInfoLoss(self,range)->float:
         min = range[0]
         max = range[1]
 
         total = self.DHG.countLeaves()
         return (max-min)/(total-1)
 
-    def createRange(self,values):
+    def createRange(self,values:List[Tuple])->Tuple:
         min = None
         max = None
         minRank = self.LeftTraversal.len() 
@@ -86,7 +86,7 @@ class _CategoricalAttributes(Attribute):
         result = (min,max)
         return result
 
-    def expandRange(self,range,value):
+    def expandRange(self,range,value:Tuple)->Tuple:
         min = range[0]
         max = range[1]
         
@@ -107,7 +107,6 @@ class _CategoricalAttributes(Attribute):
 
     def getGeneralization(self, range=None):
         if (range is not None):
-            return self.DHG.getLCA(range[0],range[1])
+            return self.getDHG().getLCA(range[0],range[1])
         else:
-            #TODO
-            return self.DHG.root
+            return self.getDHG().getRoot()
