@@ -181,20 +181,18 @@ class CASTLE:
         return NotImplementedError
     
     #return the cluster from set of given clusters whose enlargement results in the smallest information loss
-    def best_selection(self,t:TupleWrapper,candidate_clusters:list(Cluster)): 
-        clusters = {}
-        infoLoss = {}
-        cluster: Cluster
+    def best_selection(self,t:TupleWrapper,candidate_clusters:List[Cluster]) -> Cluster: 
+        changeInInfoLoss:Dict[Cluster,float] = {}
+        infoLoss:Dict[Cluster,float] = {}
         for cluster in candidate_clusters:
             infoLoss[cluster] = cluster.get_info_loss(t)
-            val = infoLoss[cluster]-cluster.get_info_loss()
-            clusters[cluster] = val
-        minValue = min(clusters.itervalues())
-        minClusters = [k for k, v in clusters.iteritems() if v == minValue]
+            changeInInfoLoss[cluster] = infoLoss[cluster]-cluster.get_info_loss()
+        minValue = min(changeInInfoLoss.itervalues())
+        minClusters:List[Cluster] = [k for k, v in changeInInfoLoss.iteritems() if v == minValue]
                 
-        SetCok=[]
+        SetCok:List[Cluster]=[]
         for cluster in minClusters:
-            if (minClusters[cluster]<=self.tau):
+            if (infoLoss[cluster]<=self.tau):
                 SetCok.append(cluster)
 
         if len(SetCok) == 0:
