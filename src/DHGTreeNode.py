@@ -4,7 +4,7 @@ class DHGTreeNode:
         
         self.parent = parent
         self.value = value
-        self.children = []
+        self.children: list(DHGTreeNode) = []
         self.pointers = []
 
     def isLeaf(self):
@@ -25,6 +25,21 @@ class DHGTreeNode:
             return 1
 
         count = 0
+        child: DHGTreeNode
         for child in self.pointers:
             count = count + child.countNodeLeaves()
         return count
+    
+    def traverseLeft(self):
+        traversed_nodes: list(DHGTreeNode) = []
+        halfway: int = len(self.children)//2
+        for i in range(halfway):
+            child: DHGTreeNode = self.children[i]
+            traversed_nodes.append(child.traverseLeft())
+        traversed_nodes.append(self)
+        for i in range((halfway+1), len(self.children)):
+            child: DHGTreeNode = self.children[i]
+            traversed_nodes.append(child.traverseLeft())
+        return traversed_nodes
+
+            

@@ -43,3 +43,7 @@ class DHG:
     def countLeaves(self):
 
         return self.root.countNodeLeaves()
+
+    
+    def getLeftTraversal(self) -> list(DHGTreeNode):
+        return self.root.traverseLeft()

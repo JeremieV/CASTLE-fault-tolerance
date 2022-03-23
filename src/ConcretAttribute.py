@@ -61,7 +61,7 @@ class _CategoricalAttributes(Attribute):
         self.name = name
         self.index = index
         self.DHG = DHG
-        self.LeftTraversal = self.DHG.getLeftTraversal() #TODO
+        self.LeftTraversal = self.DHG.getLeftTraversal()
 
 
     def calculateInfoLoss(self,range):
