@@ -105,6 +105,9 @@ class Cluster(object):
     def __len__(self):
         """Returns the quantity of tuples in the cluster"""
         return len(self.tuples)
+    
+    def size(self):
+        return self.__len__
 
     def count_distinct_tuples(self):
         """Returns the quantity of distinct tuples in the cluster"""
