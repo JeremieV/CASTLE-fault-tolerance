@@ -8,44 +8,44 @@ from cluster import Cluster
 from heap_node import HeapNode
 from my_heap import MyHeap
 from Attribute import Attribute
-from typing import Tuple
+from typing import Tuple,List
 from tupleWrapper import TupleWrapper
 class CASTLE:
 
     #declaring contants
     #what form of k-anonymity are we using
-    K=3
+    K:int =3
     #maximum time between a tuple is received and the tuple is outputed
-    DELTA = 1
+    DELTA:int = 1
     #maximum number of non k-anonymized clusters that we can store
-    BETA = 5
+    BETA:int = 5
 
-    mu = 5
+    mu:int = 5
 
     #average infoLoss of the mu more recent k anonymized clusters
-    tau = 0
+    tau:int = 0
 
-    recentClusters = []
+    recentClusters:List[Cluster] = []
 
     #Dictionary where the key is the index
     allTuples = {}
 
     #the index of the next tuple to be read
-    nextTupleIndex= 0
+    nextTupleIndex:int = 0
 
     #class variables
     # set of non k_s anonymized clusters
-    gamma = []
+    gamma:List[Cluster] = []
     
     # set of k_s anonymized clusters
-    omega = [] 
+    omega:List[Cluster] = [] 
 
-    myAttributes = []
+    myAttributes:List[Attribute] = []
 
     #tuple is the new row read from the stream
     #return a list of tuples 
-    def readTuple(self,tuple):
-        newTuple = self.createWrapper(tuple)
+    def readTuple(self,tuple:Tuple):
+        newTuple:TupleWrapper = self.createWrapper(tuple)
         C = self.best_selection(newTuple, self.gamma)
         if C is None:
             self.gamma.add(self.createCluster(newTuple))
@@ -64,22 +64,22 @@ class CASTLE:
     def getOutput(self):
         staleTupleIndex = self.nextTupleIndex-1-self.DELTA
         staleTuple = self.allTuples[staleTupleIndex]
-
-
         if (staleTuple is None):
             return ()
         else:
             self.delay_constraint(staleTuple)
 
-    #returns a string
-    def delay_constraint(self,tuple):
-        #cluster is the cluster in omega containing tuple
-        cluster = None
+    #returns a string tuple
+    #
+    #A tuple is going to expire
+    def delay_constraint(self,staleTuple:TupleWrapper):
+        #cluster is the cluster in gamme containing tuple
+        cluster = staleTuple.getCluster()
         if (cluster.size()>self.K):
             return self.outputCluster(cluster)
         
-        #clusters in gamma containing tuple
-        clusters = []
+        #clusters in omega containing tuple
+        clusters = staleTuple.getKAnonCluster()
         if (len(clusters)>0):
             return random.choice(clusters)
         
@@ -94,10 +94,10 @@ class CASTLE:
                 m+=1
 
         if (m>len(self.gamma)/2):
-            return self.suppress(tuple)
+            return self.suppress(staleTuple)
         
         if (mergeSize<self.K):
-            return self.suppress(tuple)
+            return self.suppress(staleTuple)
 
         mergedCluster = self.mergeClusters(cluster,otherClusters)
         return self.outputCluster(mergedCluster)
@@ -118,11 +118,14 @@ class CASTLE:
 
     #TODO
     #return the maximum generalization for each QI
-    def suppress(self,tuple):
+    def suppress(self,tuple: TupleWrapper):
         result = []
         for a in self.myAttributes:
-            result.append(a.getGeneralization())
-        return tuple(result)
+            if (a.isQI()):
+                result.append(a.getGeneralization())
+            else:
+                result.append(a.getValue(tuple))
+        return Tuple(result)
 
     def recalculateTau(self,newCluster: Cluster):
         #get the mu most recent cluster
@@ -155,7 +158,7 @@ class CASTLE:
     
     #return the information loss of a cluster
     #if a tuple is supplied, then return the info loss of the enlarged cluster
-    def getInfoLoss(cluster: Cluster,tuple=None):
+    def getInfoLoss(cluster: Cluster,tuple:TupleWrapper=None):
         if (tuple==None):
             return cluster.get_info_loss()
         else:
@@ -174,11 +177,11 @@ class CASTLE:
 
 
     #TODO
-    def createCluster(self,tuple):
+    def createCluster(self,tuple:TupleWrapper)->Cluster:
         return NotImplementedError
     
     #return the cluster from set of given clusters whose enlargement results in the smallest information loss
-    def best_selection(self,t,candidate_clusters): 
+    def best_selection(self,t:TupleWrapper,candidate_clusters:List[Cluster]): 
         clusters = {}
         infoLoss = {}
         for cluster in candidate_clusters:

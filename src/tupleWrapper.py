@@ -1,5 +1,5 @@
-from typing import Tuple
-
+from typing import List, Tuple
+from cluster import Cluster
 
 class TupleWrapper:
 
@@ -9,3 +9,13 @@ class TupleWrapper:
 
     def getIndex(self) -> int:
         return self.index
+
+    #return a list of k anomlyized clusters which contain the tuple
+    def getKAnonCluster(self)->List[Cluster]:
+        #TODO
+        return []
+
+    #return the non K-anomlyized clusters which contain the tuple
+    def getCluster(self)->Cluster:
+        #TODO
+        return None
