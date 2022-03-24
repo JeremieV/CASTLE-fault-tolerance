@@ -149,13 +149,14 @@ class _CategoricalAttributes(Attribute):
             return self.getDHG().getRoot()
     
     def calc_distance(self, tbar: TupleWrapper, t: TupleWrapper) -> float:
-        val_1 = self.getValue(tbar) 
-        val_2 = self.getValue(t)
-        index1=0
-        index2=0
-        for node in self.LeftTraversal:
-            if (node.value==val_1):
-                index1=node.index
-            if (node.value==val_2):
-                index2=node.index
-        return pow(index1-index2, 2)
+        val_1 = 0
+        val_2 = 0
+        for tree_node in self.LeftTraversal:
+            if tree_node.value == self.getValue(tbar):
+                val_1 = tree_node.index
+                break
+
+            elif tree_node.value == self.getValue(t):
+                val_2 = tree_node.index
+                break
+        return pow(val_1-val_2, 2)
