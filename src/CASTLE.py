@@ -72,7 +72,8 @@ class CASTLE:
                 self.gamma.append(self.createCluster(newTuple))
             else:
                 C.add_to_cluster(newTuple)
-        return self.getOutput()
+            return self.getOutput()
+        return []
 
     def createWrapper(self,t:Tuple) -> TupleWrapper:
         result = TupleWrapper(t,self.nextTupleIndex)
