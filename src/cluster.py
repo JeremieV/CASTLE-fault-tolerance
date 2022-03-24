@@ -57,7 +57,7 @@ class Cluster(object):
         buck_dict: dict(list()) = {}
         buckets: list(list(tuple)) = list(list())
         for tuple in self.tuples:
-            for attr, data in zip(self.ds.getAttributes(), tuple):
+            for attr, data in zip(self.ds.getAttributes(), tuple.getTuple()):
                 if attr.isPID():
                     buck_list: list() = buck_dict.get(data)
                     buck_list.append(tuple)
