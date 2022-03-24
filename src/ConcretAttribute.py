@@ -104,18 +104,18 @@ class _CategoricalAttributes(Attribute):
         return 0
 
     def createRange(self,values:List[Tuple])->Tuple:
-        min = None
-        max = None
+        minVal = None
+        maxVal = None
         minRank = self.getDHG().leaves.len() 
         maxRank = -1
         for element in values:
             rank = self.getDHG().leaveContents.index(element)
-            if (rank<minRank):
-                min = rank
+            if (rank<=minRank):
+                minVal = rank
             if(rank>maxRank):
-                max = rank
+                maxVal = rank
 
-        result = (min,max)
+        result = (minVal,maxVal)
         return result
 
     def expandRange(self,range,value:str)->Tuple:
@@ -123,11 +123,12 @@ class _CategoricalAttributes(Attribute):
         if (len(range)<2):
             return (valueRank,valueRank)
         
-
+        #print(valueRank)
+        #print(range)
         if (valueRank<range[0]):
-            result = (value,max)
+            result = (valueRank,range[1])
         elif (valueRank>range[1]):
-            result = (min,value)
+            result = (range[0],valueRank)
         else:
             result = range
         return result
