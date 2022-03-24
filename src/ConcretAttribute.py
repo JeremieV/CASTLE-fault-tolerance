@@ -77,7 +77,7 @@ class _ContinousAttributes(Attribute):
         return result
     
     def calc_distance(self, tbar: TupleWrapper, t: TupleWrapper) -> float:
-        pow(self.getValue(tbar)-self.getValue(t), 2)
+        pow(float(self.getValue(tbar))-float(self.getValue(t)), 2)
 
 #private class
 #concret implementation of Attribute, represents catagorical attributes
@@ -146,6 +146,14 @@ class _CategoricalAttributes(Attribute):
             return self.getDHG().getRoot()
     
     def calc_distance(self, tbar: TupleWrapper, t: TupleWrapper) -> float:
-        val_1 = self.getValue(tbar)
-        val_2 = self.getValue(t)
-        return pow(self.LeftTraversal.index(val_1)-self.LeftTraversal.index(val_2), 2)
+        val_1 = None
+        val_2 = None
+        for tree_node in self.LeftTraversal:
+            if tree_node.value == self.getValue(tbar):
+                val_1 = tree_node.index
+                break
+        for tree_node in self.LeftTraversal:
+            if tree_node.value == self.getValue(t):
+                val_2 = tree_node.index
+                break
+        return pow(val_1-val_2, 2)

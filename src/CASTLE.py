@@ -49,6 +49,7 @@ class CASTLE:
 
     def __init__(self, ds: DataSet):
         self.ds: DataSet = ds
+        self.myAttributes = ds.getAttributes()
 
     #tuple is the new row read from the stream
     #return a list of tuples 
@@ -140,7 +141,7 @@ class CASTLE:
             new_range = []
             for tuple in c1.tuples:
                 if attr.isQI:
-                    new_range = attr.expandRange(c2.ranges[attr], tuple[attr_pos])
+                    new_range = attr.expandRange(c2.ranges[attr], tuple.getTuple()[attr_pos])
             new_ranges[attr] = new_range
             sum_info_loss += attr.calculateInfoLoss(new_range)
         return sum_info_loss
@@ -286,5 +287,7 @@ class CASTLE:
         for i in range(len(self.myAttributes)):
             attr: Attribute = self.myAttributes[i]
             distances.append(attr.calc_distance(tbar, t))
+        if len(distances) == 0:
+            return 
         mean_distance =  sqrt(statistics.mean(distances))
         return mean_distance
