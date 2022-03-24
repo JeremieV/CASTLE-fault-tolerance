@@ -287,7 +287,5 @@ class CASTLE:
         for i in range(len(self.myAttributes)):
             attr: Attribute = self.myAttributes[i]
             distances.append(attr.calc_distance(tbar, t))
-        if len(distances) == 0:
-            return 
         mean_distance =  sqrt(statistics.mean(distances))
         return mean_distance

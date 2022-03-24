@@ -6,6 +6,7 @@ class HeapNode:
     def __init__(self, t=None, distance=None):
         if t is not None:
             self.tuple: tuple = t
+        
         if distance is not None:
             self.distance: int = distance
     
