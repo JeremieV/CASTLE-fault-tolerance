@@ -59,8 +59,10 @@ class Cluster(object):
         for tuple in self.tuples:
             for attr, data in zip(self.ds.getAttributes(), tuple.getTuple()):
                 if attr.isPID():
-                    buck_list: list() = buck_dict.get(data)
-                    buck_list.append(tuple)
+                    if data in buck_dict.keys():
+                        buck_dict.get(data).append(tuple)
+                    else:
+                        buck_dict[data] = [tuple]
                     break
         for bucket in buck_dict.values():
             buckets.append(bucket)
