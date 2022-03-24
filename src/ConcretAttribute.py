@@ -74,6 +74,7 @@ class _ContinousAttributes(Attribute):
         min = range[0]
         max = range[1]
         result = str(min)+"<=x<="+str(max)
+        return result
     
     def calc_distance(self, tbar: TupleWrapper, t: TupleWrapper) -> float:
         pow(self.getValue(tbar)-self.getValue(t), 2)
