@@ -18,6 +18,12 @@ class DGHFactory:
         yes.parent = maybe
         maybe.children.append(no)
         maybe.children.append(yes)
+        self.credit_tree_default.leaves = maybe.getLeaves()
+
+        content = []
+        for l in self.credit_tree_default.leaves:
+            content.append(l.value)
+        self.credit_tree_default.leaveContents = content
         self.credit_tree_default.root = maybe
 
 

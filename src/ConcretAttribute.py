@@ -106,43 +106,37 @@ class _CategoricalAttributes(Attribute):
     def createRange(self,values:List[Tuple])->Tuple:
         min = None
         max = None
-        minRank = self.LeftTraversal.len() 
+        minRank = self.getDHG().leaves.len() 
         maxRank = -1
         for element in values:
-            rank = self.LeftTraversal.index(element)
+            rank = self.getDHG().leaveContents.index(element)
             if (rank<minRank):
                 min = rank
-            elif(rank>maxRank):
+            if(rank>maxRank):
                 max = rank
 
         result = (min,max)
         return result
 
-    def expandRange(self,range,value:Tuple)->Tuple:
-        result = None
-        if len(range) > 0:
-            min = range[0]
-            max = range[1]
-            
-            minRank = self.LeftTraversal.index(min)
-            maxRank = self.LeftTraversal.index(max)
-            valueRank = self.LeftTraversal.index(value)
+    def expandRange(self,range,value:str)->Tuple:
+        valueRank = self.getDHG().leaveContents.index(value)
+        if (len(range)<2):
+            return (valueRank,valueRank)
+        
 
-            if (valueRank<minRank):
-                result = (value,max)
-            elif (valueRank>maxRank):
-                result = (min,value)
-            else:
-                result = range
+        if (valueRank<range[0]):
+            result = (value,max)
+        elif (valueRank>range[1]):
+            result = (min,value)
         else:
-            result = (value, value)
+            result = range
         return result
 
     
 
     def getGeneralization(self, range=None):
         if (range is not None):
-            return self.getDHG().getLCA(range[0],range[1])
+            return self.getDHG().getLCA(range[0],range[1]).value
         else:
             return self.getDHG().getRoot()
     

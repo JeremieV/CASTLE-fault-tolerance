@@ -10,6 +10,7 @@ class DHGTreeNode(object):
         self.parent:DHGTreeNode = None
         self.value:str = value  
         self.children: List[DHGTreeNode] = []
+        self.range = [0,0]  #range of nodes which this covers
 
     def addChild(self, child:DHGTreeNode):
         self.children.append(child)
@@ -19,6 +20,28 @@ class DHGTreeNode(object):
             return True
         else:
             return False
+
+    def getLCA(self,val1,val2):
+        if self.range[0]<=val1 and self.range[1]>=val2:
+            return self
+        return self.parent.getLCA(val1,val2)
+
+    def getLeaves(self,minIndex=0):
+        result:List[DHGTreeNode] = []
+        currentIndex = minIndex
+        for node in self.children:
+            if (node.isLeaf()):
+                node.index = currentIndex
+                currentIndex=currentIndex+1
+                result.append(node)
+            else:
+                result.extend(node.getLeaves(),currentIndex)
+                currentIndex = result[-1].index + 1
+        
+        self.range = (minIndex,currentIndex-1)
+        return result
+
+
 
     def countNodeLeaves(self):
 
