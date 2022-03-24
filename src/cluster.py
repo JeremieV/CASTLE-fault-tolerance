@@ -1,3 +1,4 @@
+from __future__ import annotations
 from copy import deepcopy
 from pickle import TRUE
 
@@ -32,8 +33,8 @@ class Cluster(object):
             if (attribute.isQI()):
                 self.ranges[attribute] = attribute.expandRange(self.ranges[attribute], data)
 
-    def enlarge(self, tuples: List[TupleWrapper]):
-        for t in tuples:
+    def enlarge(self, other_cluster: Cluster):
+        for t in other_cluster.tuples:
             self.add_to_cluster(t)
 
     def remove_from_cluster(self, t):
