@@ -238,7 +238,7 @@ class CASTLE:
     def split(self, C: Cluster):
         sc = list()
         # let BS be the buckets created by grouping tuples in C by pid attribute
-        bs: list(list(tuple)) = C.get_buckets
+        bs: list(list(tuple)) = C.get_buckets()
         while len(bs) >= self.K:
             Bbar: list(tuple) = random.choice(bs)
             tbar: tuple = random.choice(Bbar)
@@ -262,7 +262,7 @@ class CASTLE:
                 heap.add_to_heap(heap_node)
             node: HeapNode
             for node in heap.my_heap:
-                tbar: tuple = node.get_tuple
+                tbar: tuple = node.get_tuple()
                 Cnew.add_to_cluster(tbar)
                 # Let B_j be the bucket containing tbar
                 for B_j in red_bs:

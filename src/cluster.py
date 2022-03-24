@@ -17,7 +17,7 @@ class Cluster(object):
 
     def __init__(self, ds: DataSet):
         # list of all tuples in the cluster
-        self.tuples = []
+        self.tuples:List[TupleWrapper] = []
         # generalised range of attribute values
         self.ranges = {}
         # for attr in ds.getQuasiIdentifiers():
@@ -50,7 +50,7 @@ class Cluster(object):
         output: list(tuple) = list()
         for t in self.tuples:
             output.append(self.get_generic(t))
-        return Tuple(output)
+        return tuple(output)
     
     def get_buckets(self) -> List[List[Tuple]]:
         """group tuples into 'buckets' that share the same pid value"""
