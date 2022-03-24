@@ -73,7 +73,7 @@ class Cluster(object):
         output_string = ""
         attr: Attribute
         for attr in self.ds.getAttributes():
-            if attr.isQI:
+            if attr.isQI():
                 output_string = output_string + attr.getName() + attr.getGeneralization(self.ranges[attr]) + " "
             else:
                 non_quasi_value = attr.getValue(tuple)
@@ -91,13 +91,13 @@ class Cluster(object):
             if tuple is None:
                 for attribute in self.ds.getAttributes():
                     # if not a QI, the range will be 0 so the info loss will be 0
-                    if attribute.isQI:
+                    if attribute.isQI():
                         sum_info_loss += attribute.calculateInfoLoss(self.ranges[attribute])
                         n += 1
             else:
                 for attribute, data in zip(self.ds.getAttributes(), tuple.Content):
                     # if not a QI, the range will be 0 so the info loss will be 0
-                    if attribute.isQI:
+                    if attribute.isQI():
                         new_range = attribute.expandRange(self.ranges[attribute], data)
                         sum_info_loss += attribute.calculateInfoLoss(new_range)
                         n += 1
