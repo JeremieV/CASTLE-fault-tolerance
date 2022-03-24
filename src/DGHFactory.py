@@ -10,6 +10,7 @@ class DGHFactory:
     # Creates a discrete DHG and generalises both 0 and 1 to 'maybe'
     def _createTreeDefault(self):
         self.credit_tree_default = DHG()
+        
         maybe = DHGTreeNode("Maybe")
         yes = DHGTreeNode("1")
         no = DHGTreeNode("0")
@@ -17,6 +18,7 @@ class DGHFactory:
         yes.parent = maybe
         maybe.children.append(no)
         maybe.children.append(yes)
+        self.credit_tree_default.root = maybe
 
 
 

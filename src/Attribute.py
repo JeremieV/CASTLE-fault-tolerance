@@ -21,7 +21,7 @@ class Attribute(ABC):
         return self.QI
 
     #return the value of this attribute in the given tuple
-    def getValue(self,tuple:TupleWrapper):
+    def getValue(self,tuple:TupleWrapper)->str:
         if (self.index<0):
             return NotImplementedError
         else:

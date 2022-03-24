@@ -3,8 +3,8 @@ from typing import List
  
 class DHG:
 
-    def __init__(self):
-        self.root = DHGTreeNode("Any", self)
+    #def __init__(self):
+     #   self.root = DHGTreeNode("Any", self)
 
     def getLCA(self, val_1, val_2):
 
@@ -23,7 +23,6 @@ class DHG:
             return search_node.value
         
     def countLeaves(self):
-
         return self.root.countNodeLeaves()
 
     

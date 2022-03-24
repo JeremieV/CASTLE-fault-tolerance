@@ -30,7 +30,7 @@ async def stream(data):
         row = data.getNextRow()
         print("read")
         yield row
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.1)
 
 async def main():
     with open('datasets/credit_data.csv') as f:

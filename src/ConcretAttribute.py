@@ -5,6 +5,7 @@ import sys
 from typing import Tuple,List
 from Attribute import Attribute
 from DHG import DHG
+from DHGTreeNode import DHGTreeNode
 from tupleWrapper import TupleWrapper
 
 
@@ -77,7 +78,9 @@ class _ContinousAttributes(Attribute):
         return result
     
     def calc_distance(self, tbar: TupleWrapper, t: TupleWrapper) -> float:
-        pow(self.getValue(tbar)-self.getValue(t), 2)
+        v1:float = float(self.getValue(tbar))
+        v2:float = float(self.getValue(t))
+        pow(v1-v2, 2)
 
 #private class
 #concret implementation of Attribute, represents catagorical attributes
@@ -146,6 +149,13 @@ class _CategoricalAttributes(Attribute):
             return self.getDHG().getRoot()
     
     def calc_distance(self, tbar: TupleWrapper, t: TupleWrapper) -> float:
-        val_1 = self.getValue(tbar)
+        val_1 = self.getValue(tbar) 
         val_2 = self.getValue(t)
-        return pow(self.LeftTraversal.index(val_1)-self.LeftTraversal.index(val_2), 2)
+        index1=0
+        index2=0
+        for node in self.LeftTraversal:
+            if (node.value==val_1):
+                index1=node.index
+            if (node.value==val_2):
+                index2=node.index
+        return pow(index1-index2, 2)
