@@ -11,12 +11,8 @@ from DataSetFactory import DataSetFactory
 # global constants
 k     = 100 # k-anonymity guarantee
 delta = 1   # maximum time delay (in seconds)
-beta  = 10  # maximum number of non-anonymised clusters
 mu    = 100 # mu corresponds to the number of most recent ks-anonymised clusters on which tau is calculated
 beta  = 50  # beta is the threshold for controlling the maximum number of non-ks-anonymized clusters in memory
-
-# TODO how do we keep track of the mu **most recent** ks-anonymized clusters?
-# - firstly we shouldnt keep the clusters in sets, but in a list
 
 # the attribute headers is a global value that is defined when the stream starts
 # for now the quasi-identifiers are defined to be all the attributes of the tuple

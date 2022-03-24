@@ -3,7 +3,6 @@ from copy import deepcopy
 from pickle import TRUE
 
 # import main
-import random
 from xml.dom.minidom import Attr
 from DataSet import DataSet
 from Attribute import Attribute
@@ -20,7 +19,6 @@ class Cluster(object):
         self.tuples:List[TupleWrapper] = []
         # generalised range of attribute values
         self.ranges = {}
-        # for attr in ds.getQuasiIdentifiers():
         for attr in ds.getAttributes():
             self.ranges[attr] = []
         self.ds: DataSet = ds
@@ -55,7 +53,6 @@ class Cluster(object):
     def get_buckets(self) -> Dict[List[TupleWrapper]]:
         """group tuples into 'buckets' that share the same pid value"""
         buck_dict: dict(list()) = {}
-        # buckets: list(list(tuple)) = list(list())
         for tuple in self.tuples:
             for attr, data in zip(self.ds.getAttributes(), tuple.getTuple()):
                 if attr.isPID():
@@ -64,9 +61,6 @@ class Cluster(object):
                     else:
                         buck_dict[data] = [tuple]
                     break
-        # for bucket in buck_dict.values():
-        #     buckets.append(bucket)
-        # return buckets
         return buck_dict
 
 

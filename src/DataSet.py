@@ -9,10 +9,6 @@ from ConcretAttribute import AttributeFactory
 #represents the data set contained in a CSV file
 #describes the data stream
 #iterate through this like:
-# row = data.getNextTuple()
-# while(row!=null):
-#   #Do stuff
-#   row = data.getNextTuple()
 class DataSet:
     csvreader = None
     Headers = None

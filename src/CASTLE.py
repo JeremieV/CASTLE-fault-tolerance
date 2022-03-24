@@ -93,7 +93,6 @@ class CASTLE:
             return self.delay_constraint(staleTuple)
 
     #returns a string tuple
-    #
     #A tuple is going to expire
     def delay_constraint(self,staleTuple:TupleWrapper)->List[Tuple]:
         #cluster is the cluster in gamme containing tuple
@@ -139,7 +138,6 @@ class CASTLE:
  
         if (len(c)>=self.K):
             return c
-        # self.gamma.remove(minCluster)
         clusters.remove(minCluster)
         return self.mergeClusters(c,clusters)
     
@@ -148,7 +146,7 @@ class CASTLE:
         new_ranges = {}
         sum_info_loss = 0
         attributes = self.myAttributes
-        for attr_pos in range(len(attributes)): #this could change to be myAttributes instead?
+        for attr_pos in range(len(attributes)):
             attr: Attribute = attributes[attr_pos]
             new_range = []
             for tuple in c1.tuples:
@@ -212,9 +210,6 @@ class CASTLE:
             self.recalculateTau(c)
             if (c.get_info_loss()<self.tau):
                 self.omega.append(c)
-           # else:
-                #delete C???
-            #    return NotImplementedError
             if (c in self.gamma):
                 self.gamma.remove(c)
         return result
@@ -253,7 +248,6 @@ class CASTLE:
         results:List[Cluster] = []
         # let BS be the buckets created by grouping tuples in C by pid attribute
         buckets: Dict[str,List[TupleWrapper]] = C.get_buckets()
-      #  bs: list(list(tuple)) = C.get_buckets()
         while len(buckets) >= self.K:
             selectedBucket:List[TupleWrapper] = random.choice(list(buckets.values()))
             selectedTuple:TupleWrapper = random.choice(selectedBucket)
@@ -301,7 +295,6 @@ class CASTLE:
                 #find the nearest cluster in result
                 for currentTuple in bucket:
                     nearestCluster.add_to_cluster(currentTuple)
-            #buckets.pop(pid)
         return results
 
     # return the distance between the two tuples

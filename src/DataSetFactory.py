@@ -32,7 +32,6 @@ class ColumnDefinition:
 
 #creates specific datasets
 #this is Hardcoded
-#
 #creates the relavant column definition
 #returns dataset obeject
 class DataSetFactory:
@@ -47,7 +46,6 @@ class DataSetFactory:
         definition.addDef("loan",False)
         definition.PIDName = "clientid"
 
-        # I'm not great at python so calling the factory class like this
         fac = DGHFactory()
         defaultDGH = fac.createCreditDefault()
         definition.addDef("default",True,defaultDGH)
