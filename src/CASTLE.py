@@ -122,8 +122,9 @@ class CASTLE:
         if (mergeSize<self.K):
             return [self.suppress(staleTuple)]
 
-        mergedCluster = self.mergeClusters(cluster,otherClusters)
-        return self.outputCluster(mergedCluster)
+        self.mergeClusters(cluster,otherClusters)
+
+        return self.outputCluster(cluster)
 
 
     def mergeClusters(self, c: Cluster, clusters: List[Cluster])->Cluster:
@@ -214,7 +215,8 @@ class CASTLE:
            # else:
                 #delete C???
             #    return NotImplementedError
-            self.gamma.remove(c)
+            if (c in self.gamma):
+                self.gamma.remove(c)
         return result
 
 
@@ -299,7 +301,7 @@ class CASTLE:
                 #find the nearest cluster in result
                 for currentTuple in bucket:
                     nearestCluster.add_to_cluster(currentTuple)
-            buckets.pop(pid)
+            #buckets.pop(pid)
         return results
 
     # return the distance between the two tuples
