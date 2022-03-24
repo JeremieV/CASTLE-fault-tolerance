@@ -59,14 +59,19 @@ class CASTLE:
     #tuple is the new row read from the stream
     #return a list of tuples 
     def readTuple(self,tuple:Tuple) -> List[Tuple]:
-        newTuple:TupleWrapper = self.createWrapper(tuple)
-        C = None
-        if len(self.gamma) > 0:
-            C = self.best_selection(newTuple, self.gamma)
-        if C is None:
-            self.gamma.append(self.createCluster(newTuple))
-        else:
-            C.add_to_cluster(newTuple)
+        invalid =False
+        for val in tuple:
+            if val =="":
+                invalid=True
+        if (invalid==False): 
+            newTuple:TupleWrapper = self.createWrapper(tuple)
+            C = None
+            if len(self.gamma) > 0:
+                C = self.best_selection(newTuple, self.gamma)
+            if C is None:
+                self.gamma.append(self.createCluster(newTuple))
+            else:
+                C.add_to_cluster(newTuple)
         return self.getOutput()
 
     def createWrapper(self,t:Tuple) -> TupleWrapper:
