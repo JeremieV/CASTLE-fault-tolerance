@@ -32,9 +32,9 @@ class Cluster(object):
             if (attribute.isQI()):
                 self.ranges[attribute] = attribute.expandRange(self.ranges[attribute], data)
 
-    # todo
-    def enlarge(self, tuples: List[tuple]):
-        pass
+    def enlarge(self, tuples: List[TupleWrapper]):
+        for t in tuples:
+            self.add_to_cluster(t)
 
     def remove_from_cluster(self, t):
         """ Removes a tuple from the cluster """
