@@ -3,13 +3,11 @@ import sys
 
 class HeapNode:
     
-    def __init__(self):
-        self.tuple: tuple
-        self.distance = sys.maxint
-    
-    def __init__(self, t, distance):
-        self.tuple: tuple = t
-        self.distance: int = distance
+    def __init__(self, t=None, distance=None):
+        if t is not None:
+            self.tuple: tuple = t
+        if distance is not None:
+            self.distance: int = distance
     
     def set_tuple(self, t, distance):
         self.tuple = t
