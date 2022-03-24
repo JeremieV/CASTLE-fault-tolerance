@@ -37,12 +37,12 @@ class DHGTreeNode(object):
         
         for i in range(halfway):
             child: DHGTreeNode = self.children[i]
-            traversed_nodes.append(child.traverseLeft())
+            traversed_nodes.extend(child.traverseLeft())
 
         traversed_nodes.append(self)
         for i in range((halfway+1), len(self.children)):
             child: DHGTreeNode = self.children[i]
-            traversed_nodes.append(child.traverseLeft())
+            traversed_nodes.extend(child.traverseLeft())
         return traversed_nodes
 
             
