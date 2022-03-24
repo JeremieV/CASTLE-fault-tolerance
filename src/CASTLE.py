@@ -5,6 +5,8 @@ from math import sqrt, gamma
 import random
 import statistics
 import string
+import heapq
+from unittest import result
 from DataSet import DataSet
 
 from cluster import Cluster
@@ -50,6 +52,9 @@ class CASTLE:
     def __init__(self, ds: DataSet):
         self.ds: DataSet = ds
         self.myAttributes:List[Attribute] = ds.getAttributes()
+        for a in self.myAttributes:
+            if (a.isPID()):
+                self.myPID = a
 
     #tuple is the new row read from the stream
     #return a list of tuples 
@@ -237,49 +242,59 @@ class CASTLE:
 
 
     def split(self, C: Cluster):
-        sc = list()
+        results:List[Cluster] = []
         # let BS be the buckets created by grouping tuples in C by pid attribute
-        bs: list(list(tuple)) = C.get_buckets()
-        while len(bs) >= self.K:
-            Bbar: list(tuple) = random.choice(bs)
-            tbar: tuple = random.choice(Bbar)
-            Bbar.remove(tbar)               # assuming this step is required
+        buckets: Dict[str,List[TupleWrapper]] = {}
+      #  bs: list(list(tuple)) = C.get_buckets()
+        while len(buckets) >= self.K:
+            selectedBucket:List[TupleWrapper] = random.choice(buckets.values())
+            selectedTuple:TupleWrapper = random.choice(selectedBucket)
+                
+            #create a new cluster over selectedTuple
             # create a new sub-cluster Cnew over tbar 
             Cnew: Cluster = Cluster(C.ds)
-            Cnew.add_to_cluster(tbar)
-            if len(Bbar) == 0:
-                bs.remove(Bbar)
-            heap = MyHeap(self.K)
-            # red_bs is BS\Bbar
-            red_bs: list() = bs.copy()
-            if Bbar in red_bs:
-                red_bs.remove(Bbar)
-            for bucket in red_bs:
-                t: tuple = bucket[0]
-                t_dist = self.calc_distance(tbar, t)
-                heap_node: HeapNode = HeapNode(t, t_dist)
-                # if t is closer to tbar than the root of H_(k-1):
-                    # t replaces the root, and H_(k-1) is adjusted accordingly
-                heap.add_to_heap(heap_node)
-            node: HeapNode
-            for node in heap.my_heap:
-                tbar: tuple = node.get_tuple()
-                Cnew.add_to_cluster(tbar)
-                # Let B_j be the bucket containing tbar
-                for B_j in red_bs:
-                    if tbar in B_j:
-                        B_j.remove(tbar)
-                        if len(B_j) == 0:
-                            red_bs.remove(B_j)
-                        break
-            sc.append(Cnew)
-        for B_i in bs:
-            t_i = random.choice(B_i)
-            nearest_cluster: Cluster = self.best_selection(t_i, sc)
-            for t in B_i:
-                nearest_cluster.add_to_cluster(t)
-            bs.remove(B_i)
-        return sc
+            Cnew.add_to_cluster(selectedTuple)
+
+            myQueue = []
+            for bucket in buckets.values():
+                if bucket == selectedBucket:
+                    continue
+                if (len(bucket) == 0):
+                    buckets.remove(bucket)
+                    continue
+                distance:float = self.calc_distance(bucket[0],selectedTuple)
+                if (len(myQueue)>=self.K-1):
+                    if (min(myQueue)[0]<=distance):
+                        continue
+                    heapq.heappop(myQueue)
+                heapq.heappush(myQueue,(distance,bucket[0]))
+
+            for pair in myQueue:
+                currentTuple:TupleWrapper = pair[1]
+                Cnew.add_to_cluster(currentTuple)
+                pid = self.myPID.getValue(currentTuple)
+                currentBucket =  buckets[pid]
+                currentBucket.remove(currentTuple)
+                if (len(currentBucket)==0):
+                    buckets.remove(currentBucket)
+            results.append(Cnew)
+
+        for bucket in buckets.values():
+            if (len(bucket) != 0):
+                myTuple:TupleWrapper = random.choice(bucket)
+                minChange = -1
+                nearestCluster = results[0]
+                for c in results:
+                    change:int = c.get_info_loss(myTuple)-c.get_info_loss()
+                    if (minChange==-1 or change<minChange):
+                        minChange=change
+                        nearestCluster=c
+                
+                #find the nearest cluster in result
+                for currentTuple in bucket:
+                    nearestCluster.add_to_cluster(currentTuple)
+            buckets.remove(bucket)
+        return results
 
     # return the distance between the two tuples
     def calc_distance(self, tbar, t):
