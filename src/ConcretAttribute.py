@@ -155,9 +155,6 @@ class _CategoricalAttributes(Attribute):
         for tree_node in self.LeftTraversal:
             if tree_node.value == self.getValue(tbar):
                 val_1 = tree_node.index
-                break
-
             elif tree_node.value == self.getValue(t):
                 val_2 = tree_node.index
-                break
         return pow(val_1-val_2, 2)
