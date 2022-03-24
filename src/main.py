@@ -29,7 +29,7 @@ async def stream(data):
     i = 0
     while(row!=None):
         row = data.getNextRow()
-        print(str(i)+" Records read")
+        #print(str(i)+" Records read")
         i=i+1
         yield row
         await asyncio.sleep(0.1)

@@ -123,8 +123,6 @@ class _CategoricalAttributes(Attribute):
         if (len(range)<2):
             return (valueRank,valueRank)
         
-        #print(valueRank)
-        #print(range)
         if (valueRank<range[0]):
             result = (valueRank,range[1])
         elif (valueRank>range[1]):
@@ -137,6 +135,9 @@ class _CategoricalAttributes(Attribute):
 
     def getGeneralization(self, range=None):
         if (range is not None):
+            ancestor = self.getDHG().getLCA(range[0],range[1])
+            result = ancestor.value
+
             return self.getDHG().getLCA(range[0],range[1]).value
         else:
             return self.getDHG().getRoot()
