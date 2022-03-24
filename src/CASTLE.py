@@ -100,9 +100,9 @@ class CASTLE:
         for c in self.gamma:
             mergeSize += len(c)
             if(len(cluster)<len(c)):
-                if (cluster != c):
-                    otherClusters.append(c)
                 m+=1
+            if (c!=cluster):
+                otherClusters.append(c)
 
         if (m>len(self.gamma)/2):
             return [self.suppress(staleTuple)]
