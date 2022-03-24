@@ -35,13 +35,16 @@ async def stream(data):
         await asyncio.sleep(0.1)
 
 async def main():
+    records_out: int = 0
     with open('datasets/credit_data.csv') as f:
         data = DataSetFactory.createCreditData(f)
         algorithm = CASTLE(data)
         async for i in stream(data):
             result = algorithm.readTuple(i)
             for r in result:
-                print(r)
+                if len(result) > 0:
+                    records_out += 1
+                print(str(records_out) + " " + str(r))
 
 if __name__ == "__main__":
      asyncio.run(main())

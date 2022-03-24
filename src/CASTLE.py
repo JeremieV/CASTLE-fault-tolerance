@@ -250,10 +250,10 @@ class CASTLE:
     def split(self, C: Cluster):
         results:List[Cluster] = []
         # let BS be the buckets created by grouping tuples in C by pid attribute
-        buckets: Dict[str,List[TupleWrapper]] = {}
+        buckets: Dict[str,List[TupleWrapper]] = C.get_buckets()
       #  bs: list(list(tuple)) = C.get_buckets()
         while len(buckets) >= self.K:
-            selectedBucket:List[TupleWrapper] = random.choice(buckets.values())
+            selectedBucket:List[TupleWrapper] = random.choice(list(buckets.values()))
             selectedTuple:TupleWrapper = random.choice(selectedBucket)
                 
             #create a new cluster over selectedTuple
@@ -282,10 +282,10 @@ class CASTLE:
                 currentBucket =  buckets[pid]
                 currentBucket.remove(currentTuple)
                 if (len(currentBucket)==0):
-                    buckets.remove(currentBucket)
+                    buckets.pop(pid)
             results.append(Cnew)
 
-        for bucket in buckets.values():
+        for pid, bucket in buckets.items():
             if (len(bucket) != 0):
                 myTuple:TupleWrapper = random.choice(bucket)
                 minChange = -1
@@ -299,7 +299,7 @@ class CASTLE:
                 #find the nearest cluster in result
                 for currentTuple in bucket:
                     nearestCluster.add_to_cluster(currentTuple)
-            buckets.remove(bucket)
+            buckets.pop(pid)
         return results
 
     # return the distance between the two tuples

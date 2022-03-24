@@ -7,7 +7,7 @@ import random
 from xml.dom.minidom import Attr
 from DataSet import DataSet
 from Attribute import Attribute
-from typing import Tuple, List
+from typing import Dict, Tuple, List
 
 from tupleWrapper import TupleWrapper
 
@@ -52,10 +52,10 @@ class Cluster(object):
             output.append(self.get_generic(t))
         return tuple(output)
     
-    def get_buckets(self) -> List[List[Tuple]]:
+    def get_buckets(self) -> Dict[List[TupleWrapper]]:
         """group tuples into 'buckets' that share the same pid value"""
         buck_dict: dict(list()) = {}
-        buckets: list(list(tuple)) = list(list())
+        # buckets: list(list(tuple)) = list(list())
         for tuple in self.tuples:
             for attr, data in zip(self.ds.getAttributes(), tuple.getTuple()):
                 if attr.isPID():
@@ -64,9 +64,10 @@ class Cluster(object):
                     else:
                         buck_dict[data] = [tuple]
                     break
-        for bucket in buck_dict.values():
-            buckets.append(bucket)
-        return buckets
+        # for bucket in buck_dict.values():
+        #     buckets.append(bucket)
+        # return buckets
+        return buck_dict
 
 
     def get_generic(self, tuple):
