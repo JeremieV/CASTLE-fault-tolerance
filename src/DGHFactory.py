@@ -19,7 +19,6 @@ class DGHFactory:
         maybe.children.append(no)
         maybe.children.append(yes)
         self.credit_tree_default.leaves = maybe.getLeaves()
-        print(maybe.range)
 
         content = []
         for l in self.credit_tree_default.leaves:
